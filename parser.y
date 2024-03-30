@@ -120,8 +120,9 @@ return_type: INT
           | STRSLICE
           | LPAREN RPAREN;
 
-function_body:block| ;
+function_body:block;
 
+block: LBRACE expression RBRACE | LBRACE statements RBRACE | LBRACE RBRACE;
 
 statements: var_decl statements 
           | print_stmt statements
@@ -139,6 +140,7 @@ print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
 var_decl: LET ID ASSIGN expression SEMICOLON var_decl  //let x = 1 + 2;
         | LET ID SEMICOLON var_decl                     // let name;
         | LET ID ASSIGN operand SEMICOLON var_decl    // let name = 10;
+        | LET ID ASSIGN expression var_decl    // let name = 10;
         | ;
 
 if_statement: IF expression block if_statement| ;
@@ -149,16 +151,27 @@ loop_statement: LOOP block loop_statement | ;
 
 while_loop_statement: WHILE expression block while_loop_statement | ;
 
-for_loop_statement: FOR  expression   block for_loop_statement | ;
+for_loop_statement: FOR ID IN expression block for_loop_statement | ;
 
 expression: operand operator operand expression  // 1 + 4
           | operand operator operand operator operand expression; // 1 + 4 == 5
-          | ID LPAREN parameter RPAREN SEMICOLON        // function calles add(3, 4)
-          | ID LPAREN parameter RPAREN   // function calles add(3, 4)
-          | ID LPAREN operand RPAREN
-          | ID PERIOD ID LPAREN RPAREN   // array.slice(1, 3)
-          | ID PERIOD ID LPAREN parameter RPAREN
+
+          | ID LPAREN parameter RPAREN SEMICOLON //greet("allice");
+          | ID LPAREN parameter RPAREN   //is_even(number)
+
+          | ID LPAREN RPAREN SEMICOLON   //is_even()
+          | ID LPAREN RPAREN   //is_even()
+
+          | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
+          | ID PERIOD ID LPAREN  RPAREN   // array.slice()
+
+          | ID PERIOD ID LPAREN parameter RPAREN SEMICOLON// array.slice(1, 5);
+          | ID PERIOD ID LPAREN parameter RPAREN // array.slice(1, 5)
+
+          | ARRAY
           | ;
+
+
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
          | ID COLON return_type //add(x: i32)
@@ -170,9 +183,6 @@ parameter: ID COLON return_type comma parameter //add(x: i32, y: i32)
 operand: ID | NUMBER | BOOL | STRING;
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
         | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ ;
-
-
-block: LBRACE expression RBRACE | LBRACE statements RBRACE;
 
 %%
 

@@ -25,9 +25,10 @@ fn main() {
         println!("{} is odd.", number);
     } // Output: 7 is odd.
 
-    greet("Alice"); // Output: Hello, Alice!
-
-    let numbers = [1, 2, 3, 4, 5];
+    // TODO
+    // greet("Alice"); // Output: Hello, Alice!
+    // let numbers = [1, 2, 3, 4, 5];
+    
     let numbers = [];
 
     for num in numbers.iter() {

@@ -7,7 +7,6 @@
 /* Definitions */
 digit           [0-9]
 letter          [a-zA-Z]
-array_literal   \[[^\[\]]*\]
  
 %%
 "true" {return TRUE;}
@@ -42,7 +41,7 @@ array_literal   \[[^\[\]]*\]
 "->" {return ARROW;}
 
 \"([^\"\\]|\\.)*\" {return STRING;}
-array_literal {return ARRAY;}
+\[({letter}|{digit})*(\,)*\] {return ARRAY;}
 
 {letter}((\_|\-)*{letter}|{digit})*  {return ID;}
 {digit} {return NUMBER;}
