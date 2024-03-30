@@ -216,45 +216,52 @@ typedef
 #define	INT	285
 #define	FLOAT	286
 #define	BOOL	287
-#define	STRING	288
-#define	STRUCT	289
-#define	STR	290
-#define	ARROW	291
-#define	IF	292
-#define	ELSE	293
-#define	LOOP	294
-#define	WHILE	295
-#define	FOR	296
-#define	IN	297
-#define	BREAK	298
-#define	CONTINUE	299
-#define	LOGICALNOT	300
-#define	LOGICALAND	301
-#define	LOGICALOR	302
-#define	ADD	303
-#define	SUBTRACT	304
-#define	MULTIPLY	305
-#define	DIVIDE	306
-#define	REMAINDER	307
-#define	NEGATION	308
-#define	ADDEQ	309
-#define	SUBTRACTEQ	310
-#define	MULTIPLYEQ	311
-#define	DIVIDEEQ	312
-#define	REMAINDEREQ	313
-#define	SEMICOLON	314
-#define	COMMA	315
-#define	PERIOD	316
-#define	COLON	317
-#define	QUESTION_MARK	318
-#define	LPAREN	319
-#define	RPAREN	320
-#define	LBRACE	321
-#define	RBRACE	322
-#define	LSQUAREBRAC	323
-#define	RSQUAREBRAC	324
-#define	SLCOMMENT	325
-#define	MLCOMMENT	326
+#define	STRUCT	288
+#define	STRING	289
+#define	NUMBER	290
+#define	ARRAY	291
+#define	STRSLICE	292
+#define	ARROW	293
+#define	IF	294
+#define	ELSE	295
+#define	LOOP	296
+#define	WHILE	297
+#define	FOR	298
+#define	IN	299
+#define	BREAK	300
+#define	CONTINUE	301
+#define	LOGICALNOT	302
+#define	LOGICALAND	303
+#define	LOGICALOR	304
+#define	ADD	305
+#define	SUBTRACT	306
+#define	MULTIPLY	307
+#define	DIVIDE	308
+#define	ASSIGN	309
+#define	REMAINDER	310
+#define	ADDEQ	311
+#define	SUBTRACTEQ	312
+#define	MULTIPLYEQ	313
+#define	DIVIDEEQ	314
+#define	REMAINDEREQ	315
+#define	EQUALTO	316
+#define	NOTEQUALTO	317
+#define	GT	318
+#define	GTEQ	319
+#define	LT	320
+#define	LTEQ	321
+#define	SEMICOLON	322
+#define	COMMA	323
+#define	PERIOD	324
+#define	COLON	325
+#define	QUESTION_MARK	326
+#define	LPAREN	327
+#define	RPAREN	328
+#define	LBRACE	329
+#define	RBRACE	330
+#define	LSQUAREBRAC	331
+#define	RSQUAREBRAC	332
+#define	COMMENT	333
 
 
 #line 169 "/usr/share/bison++/bison.h"
@@ -333,9 +340,11 @@ static const int ID;
 static const int INT;
 static const int FLOAT;
 static const int BOOL;
-static const int STRING;
 static const int STRUCT;
-static const int STR;
+static const int STRING;
+static const int NUMBER;
+static const int ARRAY;
+static const int STRSLICE;
 static const int ARROW;
 static const int IF;
 static const int ELSE;
@@ -352,13 +361,19 @@ static const int ADD;
 static const int SUBTRACT;
 static const int MULTIPLY;
 static const int DIVIDE;
+static const int ASSIGN;
 static const int REMAINDER;
-static const int NEGATION;
 static const int ADDEQ;
 static const int SUBTRACTEQ;
 static const int MULTIPLYEQ;
 static const int DIVIDEEQ;
 static const int REMAINDEREQ;
+static const int EQUALTO;
+static const int NOTEQUALTO;
+static const int GT;
+static const int GTEQ;
+static const int LT;
+static const int LTEQ;
 static const int SEMICOLON;
 static const int COMMA;
 static const int PERIOD;
@@ -370,8 +385,7 @@ static const int LBRACE;
 static const int RBRACE;
 static const int LSQUAREBRAC;
 static const int RSQUAREBRAC;
-static const int SLCOMMENT;
-static const int MLCOMMENT;
+static const int COMMENT;
 
 
 #line 212 "/usr/share/bison++/bison.h"
@@ -410,45 +424,52 @@ static const int MLCOMMENT;
 	,INT=285
 	,FLOAT=286
 	,BOOL=287
-	,STRING=288
-	,STRUCT=289
-	,STR=290
-	,ARROW=291
-	,IF=292
-	,ELSE=293
-	,LOOP=294
-	,WHILE=295
-	,FOR=296
-	,IN=297
-	,BREAK=298
-	,CONTINUE=299
-	,LOGICALNOT=300
-	,LOGICALAND=301
-	,LOGICALOR=302
-	,ADD=303
-	,SUBTRACT=304
-	,MULTIPLY=305
-	,DIVIDE=306
-	,REMAINDER=307
-	,NEGATION=308
-	,ADDEQ=309
-	,SUBTRACTEQ=310
-	,MULTIPLYEQ=311
-	,DIVIDEEQ=312
-	,REMAINDEREQ=313
-	,SEMICOLON=314
-	,COMMA=315
-	,PERIOD=316
-	,COLON=317
-	,QUESTION_MARK=318
-	,LPAREN=319
-	,RPAREN=320
-	,LBRACE=321
-	,RBRACE=322
-	,LSQUAREBRAC=323
-	,RSQUAREBRAC=324
-	,SLCOMMENT=325
-	,MLCOMMENT=326
+	,STRUCT=288
+	,STRING=289
+	,NUMBER=290
+	,ARRAY=291
+	,STRSLICE=292
+	,ARROW=293
+	,IF=294
+	,ELSE=295
+	,LOOP=296
+	,WHILE=297
+	,FOR=298
+	,IN=299
+	,BREAK=300
+	,CONTINUE=301
+	,LOGICALNOT=302
+	,LOGICALAND=303
+	,LOGICALOR=304
+	,ADD=305
+	,SUBTRACT=306
+	,MULTIPLY=307
+	,DIVIDE=308
+	,ASSIGN=309
+	,REMAINDER=310
+	,ADDEQ=311
+	,SUBTRACTEQ=312
+	,MULTIPLYEQ=313
+	,DIVIDEEQ=314
+	,REMAINDEREQ=315
+	,EQUALTO=316
+	,NOTEQUALTO=317
+	,GT=318
+	,GTEQ=319
+	,LT=320
+	,LTEQ=321
+	,SEMICOLON=322
+	,COMMA=323
+	,PERIOD=324
+	,COLON=325
+	,QUESTION_MARK=326
+	,LPAREN=327
+	,RPAREN=328
+	,LBRACE=329
+	,RBRACE=330
+	,LSQUAREBRAC=331
+	,RSQUAREBRAC=332
+	,COMMENT=333
 
 
 #line 215 "/usr/share/bison++/bison.h"

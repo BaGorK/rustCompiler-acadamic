@@ -7,10 +7,11 @@
 /* Definitions */
 digit           [0-9]
 letter          [a-zA-Z]
-identifier      {letter}((\_|\-)*{letter}|{digit})* 
+array_literal   \[[^\[\]]*\]
  
 %%
-\"([^\"\\]|\\.)*\" {return STRING;}
+"true" {return TRUE;}
+"false" {return FALSE;}
 
 "let" {return LET;}
 "mut" {return MUT;}
@@ -21,19 +22,8 @@ identifier      {letter}((\_|\-)*{letter}|{digit})*
 "use" {return USE;}
 "mod" {return MOD;}
 
-"main" {return MAIN;}
 "fn" {return FN;}
 "println!" {return PRINTLN;}
-"{}"    {return STRINTERPOLATION;}
-
-"true" {return TRUE;}
-"false" {return FALSE;}
-
-"i32" {return INT;}
-"f64" {return FLOAT;}
-"bool" {return BOOL;}
-"&str" {return STRSLICE;}
-"->" {return ARROW;}
 
 "if" {return IF;}
 "else" {return ELSE;}
@@ -45,6 +35,19 @@ identifier      {letter}((\_|\-)*{letter}|{digit})*
 "break" {return BREAK;}
 "continue" {return CONTINUE;}
 
+"i32" {return INT;}
+"f64" {return FLOAT;}
+"bool" {return BOOL;}
+"&str" {return STRSLICE;}
+"->" {return ARROW;}
+
+\"([^\"\\]|\\.)*\" {return STRING;}
+array_literal {return ARRAY;}
+
+{letter}((\_|\-)*{letter}|{digit})*  {return ID;}
+{digit} {return NUMBER;}
+
+
 "!" {return LOGICALNOT;}
 "&&" {return LOGICALAND;}
 "||" {return LOGICALOR;}
@@ -53,12 +56,21 @@ identifier      {letter}((\_|\-)*{letter}|{digit})*
 "-" {return SUBTRACT;}
 "*" {return MULTIPLY;}
 "/" {return DIVIDE;}
+"=" {return ASSIGN;}
 "%" {return REMAINDER;}
+
 "+=" {return ADDEQ;}
 "-=" {return SUBTRACTEQ;}
 "*=" {return MULTIPLYEQ;}
 "/=" {return DIVIDEEQ;}
 "%/" {return REMAINDEREQ;}
+
+"==" {return EQUALTO;}
+"!=" {return NOTEQUALTO;}
+">" {return GT;}
+">=" {return GTEQ;}
+"<" {return LT;}
+"<=" {return LTEQ;}
 
 ";" {return SEMICOLON;}
 "," {return COMMA;}
@@ -73,16 +85,10 @@ identifier      {letter}((\_|\-)*{letter}|{digit})*
 "[" {return LSQUAREBRAC;}
 "]" {return RSQUAREBRAC;}
 
-(\/\/.*|\/\*([^*]|\*[^\/])*\*\/) {return COMMENT;}
+(\/\/.*|\/\*([^*]|\*[^\/])*\*\/) ;
+[ \t\n]+  ;
 
-
-
-
-{identifier} {return ID;}
-
-
-[\t\n \f\v]+  ;
-.* {printf("Invalid character %s\n", yytext);}
+. {printf("Invalid character sequence %s\n", yytext);}
 
 %%
 

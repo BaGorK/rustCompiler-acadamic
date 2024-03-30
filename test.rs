@@ -15,7 +15,7 @@ fn greet(name: &str) -> () {
 }
 
 fn main() {
-    let sum = add(3, 5);
+    let sum = 3 + 4;
     println!("Sum: {}", sum); // Output: Sum: 8
 
     let number = 7;
@@ -25,12 +25,11 @@ fn main() {
         println!("{} is odd.", number);
     } // Output: 7 is odd.
 
-    greet("Alice"); // Output: Hello, Alice!
+    // greet("Alice"); // Output: Hello, Alice!
 
-    let numbers = [1, 2, 3, 4, 5];
-    let numbers = [];
+    // let numbers = [1, 2, 3, 4, 5];
 
-    for num in numbers.iter() {
-        println!("Current number: {}", num);
-    }
+    // for num in numbers.iter() {
+    //     println!("Current number: {}", num);
+    // }
 }

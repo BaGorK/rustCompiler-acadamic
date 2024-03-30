@@ -44,7 +44,10 @@
 %token FLOAT              // let float: f64 = 3.14;
 %token BOOL             // Boolean type (bool)
 %token STRUCT           // allows to create custom data types
+
 %token STRING
+%token NUMBER           // NUMBER from 0-9
+%token ARRAY
 
 %token STRSLICE              // String type(&str)
 %token ARROW            // single arrow to specify the return type(->)
@@ -60,20 +63,33 @@
 %token BREAK
 %token CONTINUE
 
+// LOGICAL OPERATORS IN Rust
+
 %token LOGICALNOT              // Logical NOT operator(!)
 %token LOGICALAND               // Logical AND &&
 %token LOGICALOR                 // Logical OR ||
+
+// ARITHMETIC OPERATORS IN Rust
 
 %token ADD              // Addition operator +
 %token SUBTRACT        // Subtraction operator -
 %token MULTIPLY        // Multiplication operator *
 %token DIVIDE           // Division operator /
+%token ASSIGN           // Assignment operator =
 %token REMAINDER              // REMAINDER operator %
 %token ADDEQ          // Addition and Assignment +=
 %token SUBTRACTEQ       // Subtraction and Assignment -=
 %token MULTIPLYEQ         // Multiplication and Assignment *=
 %token DIVIDEEQ         //Division and Assignment /= 
 %token REMAINDEREQ            //Remainder and Assignment %=
+
+// CONDITIONAL OPERATORS IN Rust
+%token EQUALTO          //Equal to == Returns true if the operands are equal, otherwise returns false.
+%token NOTEQUALTO       //Not equal to != Returns true if the operands are not equal, otherwise returns false.
+%token GT               //Greater than > Returns true if the left operand is greater than the right operand, otherwise returns false.
+%token GTEQ             //Greater than or equal to >= Returns true if the left operand is greater than or equal to the right operand, otherwise returns false.
+%token LT                //Less than < Returns true if the left operand is less than the right operand, otherwise returns false.
+%token LTEQ             // Less than or equal to <= Returns true if the left operand is less than or equal to the right operand, otherwise returns false.
 
 %token SEMICOLON        // Semicolon ;
 %token COMMA            // comma ,
@@ -88,11 +104,75 @@
 %token LSQUAREBRAC      // Left square bracket [
 %token RSQUAREBRAC      // Right square bracket ]
 
-%token COMMENT        // single line comment //
+%token COMMENT        // comment //
 
 %%
 
-function:FN MAIN LPAREN RPAREN LBRACE  PRINTLN  LBRACE;
+start: function | ;
+
+function:FN ID LPAREN parameter RPAREN return_value  function_body  function| ;
+
+comma: COMMA | ;
+return_value:ARROW return_type | ;
+return_type: INT 
+          | FLOAT
+          | BOOL 
+          | STRSLICE
+          | LPAREN RPAREN;
+
+function_body:block| ;
+
+
+statements: var_decl statements 
+          | print_stmt statements
+          | if_statement statements
+          | if_else_statement statements
+          | loop_statement
+          | for_loop_statement
+          | while_loop_statement
+          |;  // | println!("Hello!");
+
+print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
+          | PRINTLN LPAREN operand RPAREN SEMICOLON print_stmt // | println!("Hello!");
+          |; 
+
+var_decl: LET ID ASSIGN expression SEMICOLON var_decl  //let x = 1 + 2;
+        | LET ID SEMICOLON var_decl                     // let name;
+        | LET ID ASSIGN operand SEMICOLON var_decl    // let name = 10;
+        | ;
+
+if_statement: IF expression block if_statement| ;
+
+if_else_statement: if_statement ELSE block if_else_statement | ;
+
+loop_statement: LOOP block loop_statement | ;
+
+while_loop_statement: WHILE expression block while_loop_statement | ;
+
+for_loop_statement: FOR  expression   block for_loop_statement | ;
+
+expression: operand operator operand expression  // 1 + 4
+          | operand operator operand operator operand expression; // 1 + 4 == 5
+          | ID LPAREN parameter RPAREN SEMICOLON        // function calles add(3, 4)
+          | ID LPAREN parameter RPAREN   // function calles add(3, 4)
+          | ID LPAREN operand RPAREN
+          | ID PERIOD ID LPAREN RPAREN   // array.slice(1, 3)
+          | ID PERIOD ID LPAREN parameter RPAREN
+          | ;
+
+parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
+         | ID COLON return_type //add(x: i32)
+         | operand COMMA operand // add(3, 4)
+         | operand // add(3)
+         | operand COMMA parameter // add(3, 4, 3)
+         | ;
+
+operand: ID | NUMBER | BOOL | STRING;
+operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
+        | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ ;
+
+
+block: LBRACE expression RBRACE | LBRACE statements RBRACE;
 
 %%
 
