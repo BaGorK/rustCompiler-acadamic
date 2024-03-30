@@ -6,16 +6,15 @@
     void test_parser();
     int result;
 %}
-
 %name myparser  // this will fix the error : parser.y:98 parser name defined to default :"parse"
 
 %token LET            //Immutable variable declaration with type annotation     let x: i32 = 42;
 %token MUT            //Mutable variable declaration without initialization let mut z;
 
 %token ENUM
-%token EXTERN 
+%token EXTERN         //EXTERN: This keyword is often used to declare functions or variables that are implemented outside the current source code file. 
 %token IMPL
-%token MATCH
+%token MATCH          //MATCH:This keyword is used for pattern matching in Rust
 %token PUB
 %token REF
 %token RETURN
@@ -42,12 +41,12 @@
 
 %token ID               // Identifier (Variable name)
 %token INT              // integer type (i32)
-%token FLOAT
+%token FLOAT              // let float: f64 = 3.14;
 %token BOOL             // Boolean type (bool)
-%token STRING
 %token STRUCT           // allows to create custom data types
+%token STRING
 
-%token STR              // String type(&str)
+%token STRSLICE              // String type(&str)
 %token ARROW            // single arrow to specify the return type(->)
 
 
@@ -70,7 +69,6 @@
 %token MULTIPLY        // Multiplication operator *
 %token DIVIDE           // Division operator /
 %token REMAINDER              // REMAINDER operator %
-%token NEGATION         // Negation operator -
 %token ADDEQ          // Addition and Assignment +=
 %token SUBTRACTEQ       // Subtraction and Assignment -=
 %token MULTIPLYEQ         // Multiplication and Assignment *=
@@ -90,8 +88,7 @@
 %token LSQUAREBRAC      // Left square bracket [
 %token RSQUAREBRAC      // Right square bracket ]
 
-%token SLCOMMENT        // single line comment //
-%token MLCOMMENT        // multiline comment /**/
+%token COMMENT        // single line comment //
 
 %%
 
