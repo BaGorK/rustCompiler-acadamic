@@ -131,6 +131,7 @@ statements: var_decl statements
           | loop_statement
           | for_loop_statement
           | while_loop_statement
+          | RETURN expression SEMICOLON
           |;  // | println!("Hello!");
 
 print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt

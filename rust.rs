@@ -1,9 +1,13 @@
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
-    x + y // The last expression is implicitly returned
+    return x + y;
 }
 
 // Function returning a boolean
+
+/**
+*
+*/
 fn is_even(num: i32) -> bool {
     num % 2 == 0 // Returns true if the number is even, false otherwise
 }
