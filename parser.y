@@ -127,7 +127,7 @@
 %%
 start: main_function | main_function function ;
 
-main_function:FN MAIN LPAREN RPAREN function_body;
+main_function:FN MAIN LPAREN RPAREN function_body {printf("main function declaration.\n")};
 
 function:FN ID LPAREN parameter RPAREN return_value  function_body  function
         | {printf("function declaration.\n")}
@@ -140,7 +140,7 @@ function_body:block;
 
 block: LBRACE expression RBRACE | LBRACE statements RBRACE | LBRACE RBRACE;
 
-statements: var_decl statements {printf("variable declaration.\n");}
+statements: var_decl statements {printf("variable declaration\n");}
           | print_stmt statements {printf("print statement.\n");}
           | if_statement statements {printf("if statement.\n");}
           | if_else_statement statements {printf("if else statement.\n");}
@@ -196,8 +196,6 @@ expression: operand operator operand expression  // 1 + 4
 
           | ARRAY
           | ;
-
-
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
          | ID COLON return_type //add(x: i32)

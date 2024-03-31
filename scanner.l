@@ -109,7 +109,7 @@ letter          [a-zA-Z]
 
 "->" {return ARROW;}
 
-\[({letter}|{digit})*(\,)*\] {return ARRAY;}
+\[({letter}|{digit})*(\,)*\] {strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
 
 
 {digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
@@ -122,7 +122,7 @@ letter          [a-zA-Z]
             return ID; // Return IDENTIFIER token
         }
         else {
-            return symbol_table[index].token_type; // Return type of the identifier
+            return ID; // Return type of the identifier
         }
     }
                 

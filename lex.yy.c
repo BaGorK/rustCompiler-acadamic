@@ -1102,7 +1102,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 112 "scanner.l"
-{return ARRAY;}
+{strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
@@ -1120,7 +1120,7 @@ YY_RULE_SETUP
             return ID; // Return IDENTIFIER token
         }
         else {
-            return symbol_table[index].token_type; // Return type of the identifier
+            return ID; // Return type of the identifier
         }
     }
 	YY_BREAK

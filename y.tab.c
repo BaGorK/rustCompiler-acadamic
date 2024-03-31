@@ -835,9 +835,9 @@ static const short yyrline[] = { 0,
    162,   163,   165,   166,   167,   168,   169,   170,   172,   172,
    174,   174,   176,   176,   178,   178,   180,   180,   182,   183,
    185,   186,   188,   189,   191,   192,   194,   195,   197,   198,
-   202,   203,   204,   205,   206,   207,   209,   210,   214,   214,
-   216,   216,   216,   216,   216,   216,   216,   216,   216,   216,
-   217,   217,   217,   217,   217,   217,   217,   217,   217,   217
+   200,   201,   202,   203,   204,   205,   207,   208,   212,   212,
+   214,   214,   214,   214,   214,   214,   214,   214,   214,   214,
+   215,   215,   215,   215,   215,   215,   215,   215,   215,   215
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","LET","MUT",
@@ -1481,13 +1481,17 @@ YYLABEL(yyreduce)
 
   switch (yyn) {
 
+case 3:
+#line 130 "parser.y"
+{printf("main function declaration.\n");
+    break;}
 case 5:
 #line 133 "parser.y"
 {printf("function declaration.\n");
     break;}
 case 14:
 #line 143 "parser.y"
-{printf("variable declaration.\n");;
+{printf("variable declaration\n");;
     break;}
 case 15:
 #line 144 "parser.y"
@@ -1522,7 +1526,7 @@ case 53:
 {printf("function call.\n");;
     break;}
 case 68:
-#line 210 "parser.y"
+#line 208 "parser.y"
 { 
                 char buf[16];
                 sprintf(buf, "%d", yyvsp[0].intval);
@@ -1732,7 +1736,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 219 "parser.y"
+#line 217 "parser.y"
 
 
 
