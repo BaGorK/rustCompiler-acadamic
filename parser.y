@@ -1,12 +1,28 @@
 %{
     #include <stdio.h>
+    #include <stdlib.h>
     extern int yylex();
     int yyerror(char* s);
     #include<string.h>
-    void test_parser();
-    int result;
+
+  extern int search_symbol_table(char *name);
+  extern void add_to_symbol_table(char *name, int type);
+  extern void displaySymbolTable();
+
+  typedef struct {
+    char* strval;
+    int intval;
+  } YYSTYPE;
+  #define YYSTYPE_IS_DECLARED
+
 %}
+
 %name myparser  // this will fix the error : parser.y:98 parser name defined to default :"parse"
+
+%union {
+  int intval;
+  char* strval;
+}
 
 %token LET            //Immutable variable declaration with type annotation     let x: i32 = 42;
 %token MUT            //Mutable variable declaration without initialization let mut z;
@@ -46,7 +62,7 @@
 %token STRUCT           // allows to create custom data types
 
 %token STRING
-%token NUMBER           // NUMBER from 0-9
+%token <intval> NUMBER           // NUMBER from 0-9
 %token ARRAY
 
 %token STRSLICE              // String type(&str)
@@ -110,7 +126,9 @@
 
 start: function | ;
 
-function:FN ID LPAREN parameter RPAREN return_value  function_body  function| ;
+function:FN ID LPAREN parameter RPAREN return_value  function_body  function
+        | {printf("function declaration.\n")}
+        ;
 
 comma: COMMA | ;
 return_value:ARROW return_type | ;
@@ -124,14 +142,14 @@ function_body:block;
 
 block: LBRACE expression RBRACE | LBRACE statements RBRACE | LBRACE RBRACE;
 
-statements: var_decl statements 
-          | print_stmt statements
-          | if_statement statements
-          | if_else_statement statements
-          | loop_statement
-          | for_loop_statement
-          | while_loop_statement
-          | RETURN expression SEMICOLON
+statements: var_decl statements {printf("variable declaration.\n");}
+          | print_stmt statements {printf("print statement.\n");}
+          | if_statement statements {printf("if statement.\n");}
+          | if_else_statement statements {printf("if else statement.\n");}
+          | loop_statement {printf("loop statement\n")}
+          | for_loop_statement {printf("for loop statement\n");}
+          | while_loop_statement {printf("while loop statement\n");}
+          | RETURN expression SEMICOLON {printf("return statement.\n");}
           |;  // | println!("Hello!");
 
 print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
@@ -160,7 +178,7 @@ expression: operand operator operand expression  // 1 + 4
           | ID LPAREN parameter RPAREN SEMICOLON //greet("allice");
           | ID LPAREN parameter RPAREN   //is_even(number)
 
-          | ID LPAREN RPAREN SEMICOLON   //is_even()
+          | ID LPAREN RPAREN SEMICOLON {printf("function call.\n");}   //is_even();
           | ID LPAREN RPAREN   //is_even()
 
           | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
@@ -181,7 +199,13 @@ parameter: ID COLON return_type comma parameter //add(x: i32, y: i32)
          | operand COMMA parameter // add(3, 4, 3)
          | ;
 
-operand: ID | NUMBER | BOOL | STRING;
+operand: ID 
+    | NUMBER {
+      char buf[16];
+      sprintf(buf, "%d", $1);
+    }
+    | BOOL | STRING;
+
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
         | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ ;
 
@@ -191,8 +215,15 @@ operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVI
 int main(int argc, char *argv[]) {
   extern FILE *yyin;
   yyin = fopen( argv[1], "r");
+
+  if (yyin == NULL) {
+      perror("Error opening file");
+      return 1;
+  }
+
   yyparse ();
 
+  fclose(yyin);
   return 0;
 }
 

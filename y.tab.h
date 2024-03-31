@@ -13,6 +13,16 @@
 
  #line 8 "/usr/share/bison++/bison.h"
 
+#line 22 "parser.y"
+typedef union {
+  int intval;
+  char* strval;
+} yy_myparser_stype;
+#define YY_myparser_STYPE yy_myparser_stype
+#ifndef YY_USE_CLASS
+#define YYSTYPE yy_myparser_stype
+#endif
+
 #line 21 "/usr/share/bison++/bison.h"
  /* %{ and %header{ and %union, during decl */
 #ifndef YY_myparser_COMPATIBILITY
@@ -67,12 +77,6 @@
 
 
  #line 68 "/usr/share/bison++/bison.h"
-#ifndef YY_USE_CLASS
-# ifndef YYSTYPE
-#  define YYSTYPE int
-#  define YYSTYPE_IS_TRIVIAL 1
-# endif
-#endif
 
 #line 68 "/usr/share/bison++/bison.h"
 /* prefix */

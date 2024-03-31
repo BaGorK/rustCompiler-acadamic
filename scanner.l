@@ -44,15 +44,15 @@ void add_to_symbol_table(char *name, int token) {
 }
 
 void displaySymbolTable() {
-    printf("Symbol Table:\n");
-    printf("------------------------------------------------\n");
-     printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
-     printf("--------------\n");
+    printf("\n\n\n-------------------------Symbol Table:----------------------------\n");
+    printf("---------------------------------------------------------------\n");
+    printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
+    printf("---------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
      printf("%-20s | %-15s | %-10d\n", symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].token_type);
 
     }
-    printf("------------------------------------------------\n");
+    printf("---------------------------------------------------------------\n");
 }
 
 // Function to search for an identifier in the symbol table and return its token name
@@ -99,7 +99,7 @@ letter          [a-zA-Z]
 "break" {return BREAK;}
 "continue" {return CONTINUE;}
 
-"i32" {return INT;}
+"i32" { strcpy(symbol_table[symbol_count].data_type, "int"); return INT;}
 "String" {return STRING; }
 "f64" {return FLOAT;}
 "bool" {return BOOL;}
@@ -110,7 +110,7 @@ letter          [a-zA-Z]
 \[({letter}|{digit})*(\,)*\] {return ARRAY;}
 
 
-{digit}+ { return NUMBER;}
+{digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
 
 {letter}((\_|\-)*{letter}|{digit})*  {return ID;}
                       

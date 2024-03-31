@@ -656,15 +656,15 @@ void add_to_symbol_table(char *name, int token) {
 }
 
 void displaySymbolTable() {
-    printf("Symbol Table:\n");
-    printf("------------------------------------------------\n");
-     printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
-     printf("--------------\n");
+    printf("\n\n\n---------------------Symbol Table:------------------------\n");
+    printf("---------------------------------------------------------------\n");
+    printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
+    printf("---------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
      printf("%-20s | %-15s | %-10d\n", symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].token_type);
 
     }
-    printf("------------------------------------------------\n");
+    printf("---------------------------------------------------------------\n");
 }
 
 // Function to search for an identifier in the symbol table and return its token name
@@ -1063,7 +1063,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 102 "scanner.l"
-{return INT;}
+{ strcpy(symbol_table[symbol_count].data_type, "int"); return INT;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
@@ -1098,7 +1098,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 113 "scanner.l"
-{ return NUMBER;}
+{yylval.intval = atoi(yytext);  return NUMBER;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP

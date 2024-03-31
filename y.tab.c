@@ -101,11 +101,31 @@ Maintained by Magnus Ekdahl <magnus@debian.org>
 #line 1 "parser.y"
 
     #include <stdio.h>
+    #include <stdlib.h>
     extern int yylex();
     int yyerror(char* s);
     #include<string.h>
-    void test_parser();
-    int result;
+
+  extern int search_symbol_table(char *name);
+  extern void add_to_symbol_table(char *name, int type);
+  extern void displaySymbolTable();
+
+  typedef struct {
+    char* strval;
+    int intval;
+  } YYSTYPE;
+  #define YYSTYPE_IS_DECLARED
+
+
+#line 22 "parser.y"
+typedef union {
+  int intval;
+  char* strval;
+} yy_myparser_stype;
+#define YY_myparser_STYPE yy_myparser_stype
+#ifndef YY_USE_CLASS
+#define YYSTYPE yy_myparser_stype
+#endif
 
 #line 88 "/usr/share/bison++/bison.cc"
 /* %{ and %header{ and %union, during decl */
@@ -160,12 +180,6 @@ Maintained by Magnus Ekdahl <magnus@debian.org>
 /* section apres lecture def, avant lecture grammaire S2 */
 
  #line 134 "/usr/share/bison++/bison.cc"
-#ifndef YY_USE_CLASS
-# ifndef YYSTYPE
-#  define YYSTYPE int
-#  define YYSTYPE_IS_TRIVIAL 1
-# endif
-#endif
 
 #line 134 "/usr/share/bison++/bison.cc"
 /* prefix */
@@ -812,15 +826,15 @@ static const short yyrhs[] = {    80,
 
 #if (YY_myparser_DEBUG != 0) || defined(YY_myparser_ERROR_VERBOSE) 
 static const short yyrline[] = { 0,
-   111,   111,   113,   113,   115,   115,   116,   116,   117,   118,
-   119,   120,   121,   123,   125,   125,   125,   127,   128,   129,
-   130,   131,   132,   133,   134,   135,   137,   138,   139,   141,
-   142,   143,   144,   145,   147,   147,   149,   149,   151,   151,
-   153,   153,   155,   155,   157,   158,   160,   161,   163,   164,
-   166,   167,   169,   170,   172,   173,   177,   178,   179,   180,
-   181,   182,   184,   184,   184,   184,   185,   185,   185,   185,
-   185,   185,   185,   185,   185,   185,   186,   186,   186,   186,
-   186,   186,   186,   186,   186
+   127,   127,   129,   130,   133,   133,   134,   134,   135,   136,
+   137,   138,   139,   141,   143,   143,   143,   145,   146,   147,
+   148,   149,   150,   151,   152,   153,   155,   156,   157,   159,
+   160,   161,   162,   163,   165,   165,   167,   167,   169,   169,
+   171,   171,   173,   173,   175,   176,   178,   179,   181,   182,
+   184,   185,   187,   188,   190,   191,   195,   196,   197,   198,
+   199,   200,   202,   203,   207,   207,   209,   209,   209,   209,
+   209,   209,   209,   209,   209,   209,   210,   210,   210,   210,
+   210,   210,   210,   210,   210
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","LET","MUT",
@@ -1456,6 +1470,53 @@ YYLABEL(yyreduce)
 
   switch (yyn) {
 
+case 4:
+#line 130 "parser.y"
+{printf("function declaration.\n");
+    break;}
+case 18:
+#line 145 "parser.y"
+{printf("variable declaration.\n");;
+    break;}
+case 19:
+#line 146 "parser.y"
+{printf("print statement.\n");;
+    break;}
+case 20:
+#line 147 "parser.y"
+{printf("if statement.\n");;
+    break;}
+case 21:
+#line 148 "parser.y"
+{printf("if else statement.\n");;
+    break;}
+case 22:
+#line 149 "parser.y"
+{printf("loop statement\n");
+    break;}
+case 23:
+#line 150 "parser.y"
+{printf("for loop statement\n");;
+    break;}
+case 24:
+#line 151 "parser.y"
+{printf("while loop statement\n");;
+    break;}
+case 25:
+#line 152 "parser.y"
+{printf("return statement.\n");;
+    break;}
+case 49:
+#line 181 "parser.y"
+{printf("function call.\n");;
+    break;}
+case 64:
+#line 203 "parser.y"
+{
+      char buf[16];
+      sprintf(buf, "%d", yyvsp[0].intval);
+    ;
+    break;}
 }
 
 #line 839 "/usr/share/bison++/bison.cc"
@@ -1660,15 +1721,22 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 188 "parser.y"
+#line 212 "parser.y"
 
 
 
 int main(int argc, char *argv[]) {
   extern FILE *yyin;
   yyin = fopen( argv[1], "r");
+
+  if (yyin == NULL) {
+      perror("Error opening file");
+      return 1;
+  }
+
   yyparse ();
 
+  fclose(yyin);
   return 0;
 }
 
