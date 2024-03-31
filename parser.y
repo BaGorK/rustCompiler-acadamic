@@ -24,6 +24,8 @@
   char* strval;
 }
 
+// %type <intval> NUMBER
+
 %token LET            //Immutable variable declaration with type annotation     let x: i32 = 42;
 %token MUT            //Mutable variable declaration without initialization let mut z;
 
@@ -56,7 +58,7 @@
 %token FALSE
 
 %token ID               // Identifier (Variable name)
-%token INT              // integer type (i32)
+%token  INT              // integer type (i32)
 %token FLOAT              // let float: f64 = 3.14;
 %token BOOL             // Boolean type (bool)
 %token STRUCT           // allows to create custom data types
@@ -123,8 +125,9 @@
 %token COMMENT        // comment //
 
 %%
+start: main_function | main_function function ;
 
-start: function | ;
+main_function:FN MAIN LPAREN RPAREN function_body;
 
 function:FN ID LPAREN parameter RPAREN return_value  function_body  function
         | {printf("function declaration.\n")}
@@ -132,11 +135,6 @@ function:FN ID LPAREN parameter RPAREN return_value  function_body  function
 
 comma: COMMA | ;
 return_value:ARROW return_type | ;
-return_type: INT 
-          | FLOAT
-          | BOOL 
-          | STRSLICE
-          | LPAREN RPAREN;
 
 function_body:block;
 
@@ -158,9 +156,18 @@ print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
 
 var_decl: LET ID ASSIGN expression SEMICOLON var_decl  //let x = 1 + 2;
         | LET ID SEMICOLON var_decl                     // let name;
+        | LET ID COLON return_type SEMICOLON
+        | LET ID COLON return_type operator operand SEMICOLON
         | LET ID ASSIGN operand SEMICOLON var_decl    // let name = 10;
         | LET ID ASSIGN expression var_decl    // let name = 10;
         | ;
+
+return_type: INT
+          | FLOAT
+          | BOOL 
+          | STRSLICE
+          | LPAREN RPAREN
+          |;
 
 if_statement: IF expression block if_statement| ;
 
@@ -200,14 +207,14 @@ parameter: ID COLON return_type comma parameter //add(x: i32, y: i32)
          | ;
 
 operand: ID 
-    | NUMBER {
-      char buf[16];
-      sprintf(buf, "%d", $1);
-    }
+    | NUMBER { 
+                char buf[16];
+                sprintf(buf, "%d", $1);
+            }
     | BOOL | STRING;
 
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
-        | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ ;
+        | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ | ASSIGN;
 
 %%
 

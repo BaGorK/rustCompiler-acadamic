@@ -49,7 +49,7 @@ void displaySymbolTable() {
     printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
     printf("---------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("%-20s | %-15s | %-10d\n", symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].token_type);
+     printf("%-20s | %-15s | %-10d\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type);
 
     }
     printf("---------------------------------------------------------------\n");
@@ -80,6 +80,8 @@ letter          [a-zA-Z]
 "let" {return LET;}
 "mut" {return MUT;}
 
+"main" {return MAIN;}
+
 "pub" {return PUB;}
 "return" {return RETURN;}
 "enum" {return ENUM;}
@@ -99,12 +101,12 @@ letter          [a-zA-Z]
 "break" {return BREAK;}
 "continue" {return CONTINUE;}
 
-"i32" { strcpy(symbol_table[symbol_count].data_type, "int"); return INT;}
 "String" {return STRING; }
-"f64" {return FLOAT;}
-"bool" {return BOOL;}
+"i32" { strcpy(symbol_table[symbol_count - 1].data_type, "int"); return INT;}
+"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float"); return FLOAT;}
+"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean"); return BOOL;}
+"&str" {strcpy(symbol_table[symbol_count - 1].data_type, "string"); return STRSLICE;}
 
-"&str" {return STRSLICE;}
 "->" {return ARROW;}
 
 \[({letter}|{digit})*(\,)*\] {return ARRAY;}
@@ -112,8 +114,18 @@ letter          [a-zA-Z]
 
 {digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
 
-{letter}((\_|\-)*{letter}|{digit})*  {return ID;}
-                      
+{letter}((\_|\-)*{letter}|{digit})*  {
+        yylval.strval = strdup(yytext); 
+        int index = search_symbol_table(yytext);
+        if (index == -1) {
+            add_to_symbol_table(yytext, ID);
+            return ID; // Return IDENTIFIER token
+        }
+        else {
+            return symbol_table[index].token_type; // Return type of the identifier
+        }
+    }
+                
 \"[^\"]*\"      { return STRING;}
 
 
@@ -163,6 +175,6 @@ letter          [a-zA-Z]
 
 int yywrap() {
   displaySymbolTable(); // Call displaySymbolTable at the end of processing
-  
+
   return 1;
 }
