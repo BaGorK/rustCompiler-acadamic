@@ -80,6 +80,7 @@
 %token IN
 %token BREAK
 %token CONTINUE
+%token AS
 
 // LOGICAL OPERATORS IN Rust
 
@@ -125,7 +126,9 @@
 %token COMMENT        // comment //
 
 %%
-start: main_function | main_function function ;
+start: import_module program ;
+import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | {printf("importing modules.\n")};
+program: main_function | main_function function ;
 
 main_function:FN MAIN LPAREN RPAREN function_body {printf("main function declaration.\n")};
 
@@ -156,8 +159,8 @@ print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
 
 var_decl: LET ID ASSIGN expression SEMICOLON var_decl  //let x = 1 + 2;
         | LET ID SEMICOLON var_decl                     // let name;
-        | LET ID COLON return_type SEMICOLON
-        | LET ID COLON return_type operator operand SEMICOLON
+        | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
+        | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
         | LET ID ASSIGN operand SEMICOLON var_decl    // let name = 10;
         | LET ID ASSIGN expression var_decl    // let name = 10;
         | ;
@@ -195,6 +198,7 @@ expression: operand operator operand expression  // 1 + 4
           | ID PERIOD ID LPAREN parameter RPAREN // array.slice(1, 5)
 
           | ARRAY
+          | operand
           | ;
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 

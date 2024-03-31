@@ -23,11 +23,9 @@ char* token_strings[] = {
     "MULTIPLY", "DIVIDE", "ASSIGN", "REMAINDER", "ADDEQ", "SUBTRACTEQ", "MULTIPLYEQ",
     "DIVIDEEQ", "REMAINDEREQ", "EQUALTO", "NOTEQUALTO", "GT", "GTEQ", "LT", "LTEQ",
     "SEMICOLON", "COMMA", "PERIOD", "COLON", "QUESTION_MARK", "LPAREN", "RPAREN",
-    "LBRACE", "RBRACE", "LSQUAREBRAC", "RSQUAREBRAC", "COMMENT"
+    "LBRACE", "RBRACE", "LSQUAREBRAC", "RSQUAREBRAC", "COMMENT", "AS"
 };
 
-
-  
 int search_symbol_table(char *name) {
     for (int i = 0; i < symbol_count; i++) {
         if (strcmp(symbol_table[i].name, name) == 0)
@@ -44,18 +42,16 @@ void add_to_symbol_table(char *name, int token) {
 }
 
 void displaySymbolTable() {
-    printf("\n\n\n-------------------------Symbol Table:----------------------------\n");
-    printf("---------------------------------------------------------------\n");
-    printf("%-20s | %-15s | %-10s\n", "Name", "Data Type", "Token Type");
-    printf("---------------------------------------------------------------\n");
+    printf("--------------------------------------------------------------------------\n");
+    printf("%-25s | %-25s | %-20s\n", "| TOKEN NAME ", "| Data Type |", "Token Type |");
+    printf("---------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("%-20s | %-15s | %-10d\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type);
+     printf("%-25s | %-25s | %-20d\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type);
 
     }
-    printf("---------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------\n");
 }
 
-// Function to search for an identifier in the symbol table and return its token name
 char* search_symbol_tableByname(char *name) {
     for (int i = 0; i < symbol_count; i++) {
         if (strcmp(symbol_table[i].name, name) == 0)
@@ -77,7 +73,7 @@ letter          [a-zA-Z]
 "true" {return TRUE;}
 "false" {return FALSE;}
 
-"let" {return LET;}
+"let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
 "mut" {return MUT;}
 
 "main" {return MAIN;}
@@ -85,10 +81,11 @@ letter          [a-zA-Z]
 "pub" {return PUB;}
 "return" {return RETURN;}
 "enum" {return ENUM;}
-"use" {return USE;}
+"use" {strcpy(symbol_table[symbol_count].data_type, "IMPORTING MODULE"); return USE;}
 "mod" {return MOD;}
+"as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
 
-"fn" {return FN;}
+"fn" { strcpy(symbol_table[symbol_count].data_type, "function"); return FN;}
 "println!" {return PRINTLN;}
 
 "if" {return IF;}
@@ -102,14 +99,14 @@ letter          [a-zA-Z]
 "continue" {return CONTINUE;}
 
 "String" {return STRING; }
-"i32" { strcpy(symbol_table[symbol_count - 1].data_type, "int"); return INT;}
-"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float"); return FLOAT;}
-"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean"); return BOOL;}
+"i32" {strcpy(symbol_table[symbol_count - 1].data_type, "integer number"); return INT;}
+"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float point number"); return FLOAT;}
+"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean variable"); return BOOL;}
 "&str" {strcpy(symbol_table[symbol_count - 1].data_type, "string"); return STRSLICE;}
 
 "->" {return ARROW;}
 
-\[({letter}|{digit})*(\,)*\] {strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
+\[[^[\]]*\] {strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
 
 
 {digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
@@ -122,6 +119,7 @@ letter          [a-zA-Z]
             return ID; // Return IDENTIFIER token
         }
         else {
+            strcpy(symbol_table[symbol_count - 1].data_type, "IDENTIFIER"); 
             return ID; // Return type of the identifier
         }
     }
