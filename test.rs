@@ -1,3 +1,6 @@
+use my_module::my_function as func;
+
+
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
     return x + y;

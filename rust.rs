@@ -2,6 +2,7 @@ use my_module::my_function as func;
 
 fn main() {
     let sum = add(3, 5);
+    
     println!("Sum: {}", sum); // Output: Sum: 8
 
     let number = 7;
@@ -20,6 +21,7 @@ fn main() {
         println!("Current number: {}", num);
     }
 }
+
 
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {

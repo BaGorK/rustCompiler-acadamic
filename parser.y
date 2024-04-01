@@ -127,13 +127,13 @@
 
 %%
 start: import_module program ;
-import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | {printf("importing modules.\n")};
+import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
 program: main_function | main_function function ;
 
-main_function:FN MAIN LPAREN RPAREN function_body {printf("main function declaration.\n")};
+main_function:FN MAIN LPAREN RPAREN function_body ; //{printf("main function declaration.\n")};
 
 function:FN ID LPAREN parameter RPAREN return_value  function_body  function
-        | {printf("function declaration.\n")}
+        | // {printf("function declaration.\n")}
         ;
 
 comma: COMMA | ;
@@ -143,14 +143,14 @@ function_body:block;
 
 block: LBRACE expression RBRACE | LBRACE statements RBRACE | LBRACE RBRACE;
 
-statements: var_decl statements {printf("variable declaration\n");}
-          | print_stmt statements {printf("print statement.\n");}
-          | if_statement statements {printf("if statement.\n");}
-          | if_else_statement statements {printf("if else statement.\n");}
-          | loop_statement {printf("loop statement\n")}
-          | for_loop_statement {printf("for loop statement\n");}
-          | while_loop_statement {printf("while loop statement\n");}
-          | RETURN expression SEMICOLON {printf("return statement.\n");}
+statements: var_decl statements // {printf("variable declaration\n");}
+          | print_stmt statements // {printf("print statement.\n");}
+          | if_statement statements // {printf("if statement.\n");}
+          | if_else_statement statements // {printf("if else statement.\n");}
+          | loop_statement // {printf("loop statement\n")}
+          | for_loop_statement // {printf("for loop statement\n");}
+          | while_loop_statement // {printf("while loop statement\n");}
+          | RETURN expression SEMICOLON // {printf("return statement.\n");}
           |;  // | println!("Hello!");
 
 print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
@@ -188,7 +188,7 @@ expression: operand operator operand expression  // 1 + 4
           | ID LPAREN parameter RPAREN SEMICOLON //greet("allice");
           | ID LPAREN parameter RPAREN   //is_even(number)
 
-          | ID LPAREN RPAREN SEMICOLON {printf("function call.\n");}   //is_even();
+          | ID LPAREN RPAREN SEMICOLON //{printf("function call.\n");}   //is_even();
           | ID LPAREN RPAREN   //is_even()
 
           | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
@@ -197,8 +197,7 @@ expression: operand operator operand expression  // 1 + 4
           | ID PERIOD ID LPAREN parameter RPAREN SEMICOLON// array.slice(1, 5);
           | ID PERIOD ID LPAREN parameter RPAREN // array.slice(1, 5)
 
-          | ARRAY
-          | operand
+          | ARRAY SEMICOLON
           | ;
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
@@ -230,6 +229,8 @@ int main(int argc, char *argv[]) {
       return 1;
   }
 
+  printf("\n No Syntax Error found. \n");
+
   yyparse ();
 
   fclose(yyin);
@@ -238,6 +239,6 @@ int main(int argc, char *argv[]) {
 
 int yyerror(char *s){
     extern int yylineno;
-    fprintf(stderr,"Error occured at line %d: %s\n",yylineno,s);
+    fprintf(stderr,"Syntax Error occured at line %d: %s\n",yylineno,s);
     return 0;
 }

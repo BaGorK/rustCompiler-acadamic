@@ -8,6 +8,7 @@
     char name[50];
     char data_type[20];
     int token_type;
+    int lineno;
     // Add more attributes as needed
   };
 
@@ -34,22 +35,25 @@ int search_symbol_table(char *name) {
     return -1; // Return -1 if not found
 }
 
-void add_to_symbol_table(char *name, int token) {
+void add_to_symbol_table(char *name, int token, int lineno) {
     strcpy(symbol_table[symbol_count].name, name);
     symbol_table[symbol_count].token_type = token;
+    symbol_table[symbol_count].lineno = lineno;
 
     symbol_count++;
 }
 
 void displaySymbolTable() {
-    printf("--------------------------------------------------------------------------\n");
-    printf("%-25s | %-25s | %-20s\n", "| TOKEN NAME ", "| Data Type |", "Token Type |");
-    printf("---------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------SYMBOL TABLE-----------------------------------------------------\n\n");
+    printf("--------------------------------------------------------------------------------------------------------------\n");
+    printf("%-25s | %-25s | %-20s |%-15s\n", "| TOKEN NAME ", "| Data Type |", "Token Type |" , "Line Number |");
+    printf("---------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("%-25s | %-25s | %-20d\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type);
+     printf("| %-25s | %-25s | %-20d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno);
 
     }
-    printf("----------------------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------------------------------------------------------\n");
 }
 
 char* search_symbol_tableByname(char *name) {
@@ -76,19 +80,19 @@ letter          [a-zA-Z]
 "let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
 "mut" {return MUT;}
 
-"main" {add_to_symbol_table(yytext, MAIN); return MAIN;}
+"main" {add_to_symbol_table(yytext, MAIN, yylineno); return MAIN;}
 
 "pub" {return PUB;}
 "return" {return RETURN;}
 "enum" {return ENUM;}
-"use" {strcpy(symbol_table[symbol_count].data_type, "IMPORTING MODULE"); return USE;}
+"use" {strcpy(symbol_table[symbol_count].data_type, "IMPORTING MOstrcpy(symbol_table[symbol_count].data_type, "function");DULE"); return USE;}
 "mod" {return MOD;}
 "as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
 
 "fn" { strcpy(symbol_table[symbol_count].data_type, "function"); return FN;}
 "println!" {return PRINTLN;}
 
-"if" {return IF;}
+"if" {add_to_symbol_table(yytext, MAIN, yylineno); return IF;}
 "else" {return ELSE;}
 
 "loop" {return LOOP;}
@@ -115,7 +119,7 @@ letter          [a-zA-Z]
         yylval.strval = strdup(yytext); 
         int index = search_symbol_table(yytext);
         if (index == -1) {
-            add_to_symbol_table(yytext, ID);
+            add_to_symbol_table(yytext, ID, yylineno);
             return ID; // Return IDENTIFIER token
         }
         else {
