@@ -76,7 +76,7 @@ letter          [a-zA-Z]
 "let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
 "mut" {return MUT;}
 
-"main" {return MAIN;}
+"main" {add_to_symbol_table(yytext, MAIN); return MAIN;}
 
 "pub" {return PUB;}
 "return" {return RETURN;}

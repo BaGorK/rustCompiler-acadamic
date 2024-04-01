@@ -986,7 +986,7 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 79 "scanner.l"
-{return MAIN;}
+{add_to_symbol_table(yytext, MAIN); return MAIN;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP

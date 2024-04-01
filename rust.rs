@@ -21,16 +21,14 @@ fn main() {
     }
 }
 
-
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
     return x + y;
 }
 
 // Function returning a boolean
-
 /**
-* F;AJFAJ;FAF;A
+* MULTILINE COMMENTS
 */
 fn is_even(num: i32) -> bool {
     num % 2 == 0 // Returns true if the number is even, false otherwise
