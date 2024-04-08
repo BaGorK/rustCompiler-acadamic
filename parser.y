@@ -128,41 +128,35 @@
 %%
 start: import_module program ;
 import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
-program: main_function | main_function function ;
+program: statements  main_function  function;
 
-main_function:FN MAIN LPAREN RPAREN function_body ; //{printf("main function declaration.\n")};
+main_function:FN MAIN LPAREN RPAREN block ; //{printf("main function declaration.\n")};
 
-function:FN ID LPAREN parameter RPAREN return_value  function_body  function
+function:FN ID LPAREN parameter RPAREN return_value  block  function
         | // {printf("function declaration.\n")}
         ;
 
-comma: COMMA | ;
 return_value:ARROW return_type | ;
 
-function_body:block;
-
-block: LBRACE expression RBRACE | LBRACE statements RBRACE | LBRACE RBRACE;
-
-statements: var_decl statements // {printf("variable declaration\n");}
-          | print_stmt statements // {printf("print statement.\n");}
-          | if_statement statements // {printf("if statement.\n");}
-          | if_else_statement statements // {printf("if else statement.\n");}
+statements: var_decl // {printf("variable declaration\n");}
+          | print_stmt // {printf("print statement.\n");}
+          | if_statement // {printf("if statement.\n");}
+          | if_else_statement // {printf("if else statement.\n");}
           | loop_statement // {printf("loop statement\n")}
           | for_loop_statement // {printf("for loop statement\n");}
           | while_loop_statement // {printf("while loop statement\n");}
           | RETURN expression SEMICOLON // {printf("return statement.\n");}
           |;  // | println!("Hello!");
 
-print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON print_stmt
-          | PRINTLN LPAREN operand RPAREN SEMICOLON print_stmt // | println!("Hello!");
+print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
+          | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
           |; 
 
-var_decl: LET ID ASSIGN expression SEMICOLON var_decl  //let x = 1 + 2;
-        | LET ID SEMICOLON var_decl                     // let name;
+var_decl: LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;
+        | LET ID SEMICOLON                      // let name;
+        | LET ID ASSIGN operand SEMICOLON     // let name = 10;
         | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
         | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
-        | LET ID ASSIGN operand SEMICOLON var_decl    // let name = 10;
-        | LET ID ASSIGN expression var_decl    // let name = 10;
         | ;
 
 return_type: INT
@@ -172,9 +166,9 @@ return_type: INT
           | LPAREN RPAREN
           |;
 
-if_statement: IF expression block if_statement| ;
+if_statement: IF expression block| ;
 
-if_else_statement: if_statement ELSE block if_else_statement | ;
+if_else_statement: if_statement ELSE block | ;
 
 loop_statement: LOOP block loop_statement | ;
 
@@ -182,29 +176,24 @@ while_loop_statement: WHILE expression block while_loop_statement | ;
 
 for_loop_statement: FOR ID IN expression block for_loop_statement | ;
 
-expression: operand operator operand expression  // 1 + 4
-          | operand operator operand operator operand expression; // 1 + 4 == 5
+expression: operand operator operand  // 1 + 4
+          | operand operator operand operator operand; // 1 + 4 == 5
 
           | ID LPAREN parameter RPAREN SEMICOLON //greet("allice");
           | ID LPAREN parameter RPAREN   //is_even(number)
 
-          | ID LPAREN RPAREN SEMICOLON //{printf("function call.\n");}   //is_even();
-          | ID LPAREN RPAREN   //is_even()
-
-          | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
-          | ID PERIOD ID LPAREN  RPAREN   // array.slice()
-
-          | ID PERIOD ID LPAREN parameter RPAREN SEMICOLON// array.slice(1, 5);
-          | ID PERIOD ID LPAREN parameter RPAREN // array.slice(1, 5)
-
+          | ID PERIOD ID LPAREN  RPAREN   // array.slice() // array.slice(1, 5)
           | ARRAY SEMICOLON
+
+          // | ID PERIOD ID LPAREN parameter RPAREN 
+          // | ID LPAREN RPAREN SEMICOLON //{printf("function call.\n");}   //is_even();
+          // | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
+          // | ID PERIOD ID LPAREN parameter RPAREN SEMICOLON// array.slice(1, 5);
           | ;
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
-         | ID COLON return_type //add(x: i32)
-         | operand COMMA operand // add(3, 4)
-         | operand // add(3)
-         | operand COMMA parameter // add(3, 4, 3)
+         | operand comma parameter // add(3, 4)
+        //  | operand // add(3)
          | ;
 
 operand: ID 
@@ -217,6 +206,11 @@ operand: ID
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
         | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ | ASSIGN;
 
+comma: COMMA | ;
+
+block: LBRACE expression RBRACE | LBRACE statements RBRACE;
+
+
 %%
 
 
@@ -228,8 +222,6 @@ int main(int argc, char *argv[]) {
       perror("Error opening file");
       return 1;
   }
-
-  printf("\n No Syntax Error found. \n");
 
   yyparse ();
 

@@ -44,7 +44,7 @@ void add_to_symbol_table(char *name, int token, int lineno) {
 }
 
 void displaySymbolTable() {
-    printf("------------------------------------------------------------------------------------------------------------\n");
+    // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE-----------------------------------------------------\n\n");
     printf("--------------------------------------------------------------------------------------------------------------\n");
     printf("%-25s | %-25s | %-20s |%-15s\n", "| TOKEN NAME ", "| Data Type |", "Token Type |" , "Line Number |");
@@ -85,7 +85,7 @@ letter          [a-zA-Z]
 "pub" {return PUB;}
 "return" {return RETURN;}
 "enum" {return ENUM;}
-"use" {strcpy(symbol_table[symbol_count].data_type, "IMPORTING MOstrcpy(symbol_table[symbol_count].data_type, "function");DULE"); return USE;}
+"use" {strcpy(symbol_table[symbol_count].data_type, "function"); return USE;}
 "mod" {return MOD;}
 "as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
 
