@@ -5,9 +5,20 @@
     int yyerror(char* s);
     #include<string.h>
 
-  extern int search_symbol_table(char *name);
-  extern void add_to_symbol_table(char *name, int type);
-  extern void displaySymbolTable();
+
+extern void add_to_symbol_table(char *name, int type,int line_number);
+extern int search_symbol_table(char *name, int scope, int scope_id);
+extern void displaySymbolTable();
+
+  extern int yylineno;
+  extern int scope_count;
+  extern int scope_count;
+  extern int scope_id_count;
+
+  extern FILE *yyin;
+  extern int yylex();
+
+
 
   typedef struct {
     char* strval;
@@ -25,6 +36,13 @@
 }
 
 // %type <intval> NUMBER
+
+%type <strval> var_decl
+// %type <strval> primary_expression
+
+%token <strval>  ID
+// %token <strval> STRING_LITERAL ID
+// %token <strval> NUMBER
 
 %token LET            //Immutable variable declaration with type annotation     let x: i32 = 42;
 %token MUT            //Mutable variable declaration without initialization let mut z;
@@ -57,7 +75,7 @@
 %token TRUE  
 %token FALSE
 
-%token ID               // Identifier (Variable name)
+// %token ID               // Identifier (Variable name)
 %token  INT              // integer type (i32)
 %token FLOAT              // let float: f64 = 3.14;
 %token BOOL             // Boolean type (bool)
@@ -125,10 +143,12 @@
 
 %token COMMENT        // comment //
 
+%start program
 %%
-start: import_module program ;
+
+program: import_module statements  main_function  function;
+
 import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
-program: statements  main_function  function;
 
 main_function:FN MAIN LPAREN RPAREN block ; //{printf("main function declaration.\n")};
 
@@ -139,42 +159,58 @@ function:FN ID LPAREN parameter RPAREN return_value  block  function
 return_value:ARROW return_type | ;
 
 statements: var_decl // {printf("variable declaration\n");}
-          | print_stmt // {printf("print statement.\n");}
-          | if_statement // {printf("if statement.\n");}
-          | if_else_statement // {printf("if else statement.\n");}
-          | loop_statement // {printf("loop statement\n")}
-          | for_loop_statement // {printf("for loop statement\n");}
-          | while_loop_statement // {printf("while loop statement\n");}
-          | RETURN expression SEMICOLON // {printf("return statement.\n");}
-          |;  // | println!("Hello!");
+          // | print_stmt // {printf("print statement.\n");}
+          // | if_statement // {printf("if statement.\n");}
+          // | if_else_statement // {printf("if else statement.\n");}
+          // | loop_statement // {printf("loop statement\n")}
+          // | for_loop_statement // {printf("for loop statement\n");}
+          // | while_loop_statement // {printf("while loop statement\n");}
+          // | RETURN expression SEMICOLON // {printf("return statement.\n");}
+          // |;  // | println!("Hello!");
 
-print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
-          | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
-          |; 
+// print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
+//           | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
+//           |; 
 
-var_decl: LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;
-        | LET ID SEMICOLON                      // let name;
-        | LET ID ASSIGN operand SEMICOLON     // let name = 10;
-        | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
-        | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
-        | ;
+var_decl: LET ID SEMICOLON  {
+                      printf("Variable declaration: %s\n", $2);
+                      char *identifier = $2;
+                      int token = search_symbol_table(identifier,scope_count,scope_id_count);
+                      if (token != -1) {
+                          printf("Error: Identifier '%s' already exists in the symbol table with token type %d.\n", identifier, token);
+                          yyerror("Identifier already declared");
+                      } else {
+                          printf("Identifier '%s' added to symbol table with token type %d.\n", identifier, ID);
+                          add_to_symbol_table(identifier, ID,yylineno); 
+                      }
+                  };   
+        // | LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;                  // let name;
+        // | LET ID ASSIGN operand SEMICOLON     // let name = 10;
+        // | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
+        // | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
+        // | ;
 
-return_type: INT
+return_type: INType: INT
+          | FLOAT
+          | BOOL 
+          | STRSLICE
+          | LPAREN RPAREN
+          |;
           | FLOAT
           | BOOL 
           | STRSLICE
           | LPAREN RPAREN
           |;
 
-if_statement: IF expression block| ;
+// if_statement: IF expression block| ;
 
-if_else_statement: if_statement ELSE block | ;
+// if_else_statement: if_statement ELSE block | ;
 
-loop_statement: LOOP block loop_statement | ;
+// loop_statement: LOOP block loop_statement | ;
 
-while_loop_statement: WHILE expression block while_loop_statement | ;
+// while_loop_statement: WHILE expression block while_loop_statement | ;
 
-for_loop_statement: FOR ID IN expression block for_loop_statement | ;
+// for_loop_statement: FOR ID IN expression block for_loop_statement | ;
 
 expression: operand operator operand  // 1 + 4
           | operand operator operand operator operand; // 1 + 4 == 5
@@ -192,9 +228,9 @@ expression: operand operator operand  // 1 + 4
           | ;
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
-         | operand comma parameter // add(3, 4)
-        //  | operand // add(3)
-         | ;
+//          | operand comma parameter // add(3, 4)
+//         //  | operand // add(3)
+//          | ;
 
 operand: ID 
     | NUMBER { 

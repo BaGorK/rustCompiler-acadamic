@@ -9,60 +9,51 @@
     char data_type[20];
     int token_type;
     int lineno;
+
+    int scope;
+    int scope_id;
     // Add more attributes as needed
   };
 
   struct symbol_entry symbol_table[100];
   int symbol_count = 0; // Counter to track the number of entries in symbol table
+  int scope_count = 0;
+  int scope_id_count = 0;
 
-char* token_strings[] = {
-    "LET", "MUT", "ENUM", "EXTERN", "IMPL", "MATCH", "PUB", "REF", "RETURN", "SELF", "STATIC",
-    "SUPER", "TRAIT", "TYPE", "UNSAFE", "WHERE", "ASYNC", "AWAIT", "USE", "MOD", "MAIN", "FN",
-    "PRINTLN", "STRINTERPOLATION", "TRUE", "FALSE", "ID", "INT", "FLOAT", "BOOL", "STRUCT",
-    "STRING", "NUMBER", "ARRAY", "STRSLICE", "ARROW", "IF", "ELSE", "LOOP", "WHILE", "FOR", "IN",
-    "BREAK", "CONTINUE", "LOGICALNOT", "LOGICALAND", "LOGICALOR", "ADD", "SUBTRACT",
-    "MULTIPLY", "DIVIDE", "ASSIGN", "REMAINDER", "ADDEQ", "SUBTRACTEQ", "MULTIPLYEQ",
-    "DIVIDEEQ", "REMAINDEREQ", "EQUALTO", "NOTEQUALTO", "GT", "GTEQ", "LT", "LTEQ",
-    "SEMICOLON", "COMMA", "PERIOD", "COLON", "QUESTION_MARK", "LPAREN", "RPAREN",
-    "LBRACE", "RBRACE", "LSQUAREBRAC", "RSQUAREBRAC", "COMMENT", "AS"
-};
-
-
-void add_to_symbol_table(char *name, int token, int lineno) {
+void add_to_symbol_table(char *name, int type, int lineno) {
     strcpy(symbol_table[symbol_count].name, name);
-    symbol_table[symbol_count].token_type = token;
+    symbol_table[symbol_count].token_type = type;
     symbol_table[symbol_count].lineno = lineno;
+
+    symbol_table[scope_count].scope = scope_count;
+    symbol_table[scope_count].scope_id = scope_id_count;
 
     symbol_count++;
 }
 
-int search_symbol_table(char *name) {
+int search_symbol_table(char *name, int scope, int scope_id) {
     for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, name) == 0)
-            return symbol_table[i].token_type; // Return token if found
+        if (strcmp(symbol_table[i].name, name) == 0 
+            && symbol_table[i].scope == scope 
+            && symbol_table[i].scope_id == scope_id
+            ) {
+                return symbol_table[i].token_type; // Return token if found
+            }
     }
     return -1; // Return -1 if not found
 }
 
-char* search_symbol_tableByname(char *name) {
-    for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, name) == 0)
-            return token_strings[symbol_table[i].token_type]; // Return token name if found
-    }
-    return "UNKNOWN"; // Return "UNKNOWN" if not found
-}
-
 void displaySymbolTable() {
     // printf("------------------------------------------------------------------------------------------------------------\n");
-    printf("-------------------------------------------SYMBOL TABLE-----------------------------------------------------\n\n");
-    printf("--------------------------------------------------------------------------------------------------------------\n");
-    printf("%-25s | %-25s | %-20s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |");
-    printf("---------------------------------------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("%-25s | %-25s | %-20s |%-15s |%-15s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("| %-25s | %-25s | %-20d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno);
+     printf("| %-25s | %-25s | %-20d |%-15d |%-15d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id);
 
     }
-    printf("---------------------------------------------------------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
 }
 
 
@@ -78,22 +69,27 @@ letter          [a-zA-Z]
 "true" {return TRUE;}
 "false" {return FALSE;}
 
-"let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
 "mut" {return MUT;}
 
+"let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
 "main" {add_to_symbol_table(yytext, MAIN, yylineno); return MAIN;}
+"fn" { strcpy(symbol_table[symbol_count].data_type, "function"); return FN;}
+"use" {strcpy(symbol_table[symbol_count].data_type, "function"); return USE;}
+"as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
+
+"i32" {strcpy(symbol_table[symbol_count - 1].data_type, "integer number"); return INT;}
+"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float point number"); return FLOAT;}
+"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean variable"); return BOOL;}
+"&str" {strcpy(symbol_table[symbol_count - 1].data_type, "string"); return STRSLICE;}
 
 "pub" {return PUB;}
 "return" {return RETURN;}
 "enum" {return ENUM;}
-"use" {strcpy(symbol_table[symbol_count].data_type, "function"); return USE;}
 "mod" {return MOD;}
-"as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
 
-"fn" { strcpy(symbol_table[symbol_count].data_type, "function"); return FN;}
 "println!" {return PRINTLN;}
 
-"if" {add_to_symbol_table(yytext, MAIN, yylineno); return IF;}
+"if" {return IF;}
 "else" {return ELSE;}
 
 "loop" {return LOOP;}
@@ -104,30 +100,21 @@ letter          [a-zA-Z]
 "continue" {return CONTINUE;}
 
 "String" {return STRING; }
-"i32" {strcpy(symbol_table[symbol_count - 1].data_type, "integer number"); return INT;}
-"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float point number"); return FLOAT;}
-"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean variable"); return BOOL;}
-"&str" {strcpy(symbol_table[symbol_count - 1].data_type, "string"); return STRSLICE;}
 
 "->" {return ARROW;}
 
 \[[^[\]]*\] {strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
 
-
 {digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
-
-{letter}((\_|\-)*{letter}|{digit})*  {
-        yylval.strval = strdup(yytext); 
-        int index = search_symbol_table(yytext);
-        if (index == -1) {
-            add_to_symbol_table(yytext, ID, yylineno);
-            return ID; // Return IDENTIFIER token
-        }
-        else {
-            strcpy(symbol_table[symbol_count - 1].data_type, "IDENTIFIER"); 
-            return ID; // Return type of the identifier
-        }
-    }
+{letter}((\_|\-)*{letter}|{digit})*  { yylval.strval = strdup(yytext);
+                          int index = search_symbol_table(yytext,-1,-1);
+                          if (index == -1) {
+                              return ID;
+                          }
+                          else {
+                              return ID;
+                          }
+                        }
                 
 \"[^\"]*\"      { return STRING;}
 
@@ -164,8 +151,10 @@ letter          [a-zA-Z]
 
 "(" {return LPAREN;}
 ")" {return RPAREN;}
-"{" {return LBRACE;}
-"}" {return RBRACE;}
+
+"{" {symbol_count++; scope_id_count++; return LBRACE;}
+"}" {symbol_count--; return RBRACE;}
+
 "[" {return LSQUAREBRAC;}
 "]" {return RSQUAREBRAC;}
 

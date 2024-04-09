@@ -13,7 +13,7 @@
 
  #line 8 "/usr/share/bison++/bison.h"
 
-#line 22 "parser.y"
+#line 33 "parser.y"
 typedef union {
   int intval;
   char* strval;
@@ -190,33 +190,33 @@ typedef
 
 
  #line 169 "/usr/share/bison++/bison.h"
-#define	LET	258
-#define	MUT	259
-#define	ENUM	260
-#define	EXTERN	261
-#define	IMPL	262
-#define	MATCH	263
-#define	PUB	264
-#define	REF	265
-#define	RETURN	266
-#define	SELF	267
-#define	STATIC	268
-#define	SUPER	269
-#define	TRAIT	270
-#define	TYPE	271
-#define	UNSAFE	272
-#define	WHERE	273
-#define	ASYNC	274
-#define	AWAIT	275
-#define	USE	276
-#define	MOD	277
-#define	MAIN	278
-#define	FN	279
-#define	PRINTLN	280
-#define	STRINTERPOLATION	281
-#define	TRUE	282
-#define	FALSE	283
-#define	ID	284
+#define	ID	258
+#define	LET	259
+#define	MUT	260
+#define	ENUM	261
+#define	EXTERN	262
+#define	IMPL	263
+#define	MATCH	264
+#define	PUB	265
+#define	REF	266
+#define	RETURN	267
+#define	SELF	268
+#define	STATIC	269
+#define	SUPER	270
+#define	TRAIT	271
+#define	TYPE	272
+#define	UNSAFE	273
+#define	WHERE	274
+#define	ASYNC	275
+#define	AWAIT	276
+#define	USE	277
+#define	MOD	278
+#define	MAIN	279
+#define	FN	280
+#define	PRINTLN	281
+#define	STRINTERPOLATION	282
+#define	TRUE	283
+#define	FALSE	284
 #define	INT	285
 #define	FLOAT	286
 #define	BOOL	287
@@ -315,6 +315,7 @@ public:
   /* static const int token ... */
   
  #line 212 "/usr/share/bison++/bison.h"
+static const int ID;
 static const int LET;
 static const int MUT;
 static const int ENUM;
@@ -341,7 +342,6 @@ static const int PRINTLN;
 static const int STRINTERPOLATION;
 static const int TRUE;
 static const int FALSE;
-static const int ID;
 static const int INT;
 static const int FLOAT;
 static const int BOOL;
@@ -400,33 +400,33 @@ static const int COMMENT;
   enum YY_myparser_ENUM_TOKEN { YY_myparser_NULL_TOKEN=0
   
  #line 215 "/usr/share/bison++/bison.h"
-	,LET=258
-	,MUT=259
-	,ENUM=260
-	,EXTERN=261
-	,IMPL=262
-	,MATCH=263
-	,PUB=264
-	,REF=265
-	,RETURN=266
-	,SELF=267
-	,STATIC=268
-	,SUPER=269
-	,TRAIT=270
-	,TYPE=271
-	,UNSAFE=272
-	,WHERE=273
-	,ASYNC=274
-	,AWAIT=275
-	,USE=276
-	,MOD=277
-	,MAIN=278
-	,FN=279
-	,PRINTLN=280
-	,STRINTERPOLATION=281
-	,TRUE=282
-	,FALSE=283
-	,ID=284
+	,ID=258
+	,LET=259
+	,MUT=260
+	,ENUM=261
+	,EXTERN=262
+	,IMPL=263
+	,MATCH=264
+	,PUB=265
+	,REF=266
+	,RETURN=267
+	,SELF=268
+	,STATIC=269
+	,SUPER=270
+	,TRAIT=271
+	,TYPE=272
+	,UNSAFE=273
+	,WHERE=274
+	,ASYNC=275
+	,AWAIT=276
+	,USE=277
+	,MOD=278
+	,MAIN=279
+	,FN=280
+	,PRINTLN=281
+	,STRINTERPOLATION=282
+	,TRUE=283
+	,FALSE=284
 	,INT=285
 	,FLOAT=286
 	,BOOL=287

@@ -1,7 +1,6 @@
 // use my_module::my_function as func;
 
-// let sum = 4;
-
+let gVar;
 fn main() {
-    let sum = 2 + 3;
+    // let lVar;
 }
