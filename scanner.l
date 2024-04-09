@@ -27,8 +27,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
     symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
 
-    symbol_table[scope_count].scope = scope_count;
-    symbol_table[scope_count].scope_id = scope_id_count;
+    symbol_table[symbol_count].scope = scope_count;
+    symbol_table[symbol_count].scope_id = scope_id_count;
 
     symbol_count++;
 }
@@ -148,9 +148,9 @@ letter          [a-zA-Z]
 "(" {return LPAREN;}
 ")" {return RPAREN;}
 
-"{" {symbol_count++; scope_id_count++; return LBRACE;}
+"{" {scope_id_count++; scope_count++; return LBRACE;}
 
-"}" {symbol_count--; return RBRACE;}
+"}" {scope_count--; return RBRACE;}
 
 "[" {return LSQUAREBRAC;}
 "]" {return RSQUAREBRAC;}

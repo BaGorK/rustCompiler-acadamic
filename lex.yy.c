@@ -641,8 +641,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
     symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
 
-    symbol_table[scope_count].scope = scope_count;
-    symbol_table[scope_count].scope_id = scope_id_count;
+    symbol_table[symbol_count].scope = scope_count;
+    symbol_table[symbol_count].scope_id = scope_id_count;
 
     symbol_count++;
 }
@@ -1258,12 +1258,12 @@ YY_RULE_SETUP
 case 59:
 YY_RULE_SETUP
 #line 151 "scanner.l"
-{symbol_count++; scope_id_count++; return LBRACE;}
+{scope_id_count++; scope_count++; return LBRACE;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
 #line 153 "scanner.l"
-{symbol_count--; return RBRACE;}
+{scope_count--; return RBRACE;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
