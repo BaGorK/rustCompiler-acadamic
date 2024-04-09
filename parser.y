@@ -67,7 +67,7 @@
 %token <intval> NUMBER           // NUMBER from 0-9
 %token ARRAY
 
-%token STRSLICE              // String type(&str)
+%token STRSLICE         // String type(&str)
 %token ARROW            // single arrow to specify the return type(->)
 
 
@@ -75,8 +75,8 @@
 %token ELSE
 
 %token LOOP             // Loop: Executes a block of code indefinitely until explicitly exited using a break 
-%token WHILE                // while loop   
-%token FOR                // for in loop
+%token WHILE            // while loop   
+%token FOR              // for in loop
 %token IN
 %token BREAK
 %token CONTINUE

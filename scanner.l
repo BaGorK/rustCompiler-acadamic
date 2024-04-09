@@ -27,13 +27,6 @@ char* token_strings[] = {
     "LBRACE", "RBRACE", "LSQUAREBRAC", "RSQUAREBRAC", "COMMENT", "AS"
 };
 
-int search_symbol_table(char *name) {
-    for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, name) == 0)
-            return symbol_table[i].token_type; // Return token if found
-    }
-    return -1; // Return -1 if not found
-}
 
 void add_to_symbol_table(char *name, int token, int lineno) {
     strcpy(symbol_table[symbol_count].name, name);
@@ -43,17 +36,12 @@ void add_to_symbol_table(char *name, int token, int lineno) {
     symbol_count++;
 }
 
-void displaySymbolTable() {
-    // printf("------------------------------------------------------------------------------------------------------------\n");
-    printf("-------------------------------------------SYMBOL TABLE-----------------------------------------------------\n\n");
-    printf("--------------------------------------------------------------------------------------------------------------\n");
-    printf("%-25s | %-25s | %-20s |%-15s\n", "| TOKEN NAME ", "| Data Type |", "Token Type |" , "Line Number |");
-    printf("---------------------------------------------------------------------------------------------------------------\n");
+int search_symbol_table(char *name) {
     for (int i = 0; i < symbol_count; i++) {
-     printf("| %-25s | %-25s | %-20d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno);
-
+        if (strcmp(symbol_table[i].name, name) == 0)
+            return symbol_table[i].token_type; // Return token if found
     }
-    printf("---------------------------------------------------------------------------------------------------------------\n");
+    return -1; // Return -1 if not found
 }
 
 char* search_symbol_tableByname(char *name) {
@@ -62,6 +50,19 @@ char* search_symbol_tableByname(char *name) {
             return token_strings[symbol_table[i].token_type]; // Return token name if found
     }
     return "UNKNOWN"; // Return "UNKNOWN" if not found
+}
+
+void displaySymbolTable() {
+    // printf("------------------------------------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------SYMBOL TABLE-----------------------------------------------------\n\n");
+    printf("--------------------------------------------------------------------------------------------------------------\n");
+    printf("%-25s | %-25s | %-20s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |");
+    printf("---------------------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < symbol_count; i++) {
+     printf("| %-25s | %-25s | %-20d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno);
+
+    }
+    printf("---------------------------------------------------------------------------------------------------------------\n");
 }
 
 
