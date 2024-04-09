@@ -20,7 +20,28 @@
   int scope_count = 0;
   int scope_id_count = 0;
 
+
+int search_symbol_table(char *name, int scope, int scope_id) {
+    for (int i = 0; i < symbol_count; i++) {
+        //  if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
+        //     return symbol_table[i].token_type;
+        // }
+        // else 
+        if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
+            return symbol_table[i].token_type;
+        }
+    }
+    return -1; // Return -1 if not found
+}
+
+
 void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
+  int index = search_symbol_table(name, scope_count, scope_id_count);
+  if (index != -1) {
+    printf("Error: Variable %s already declared in the same scope at line number %d with scope of %d and scope id of %d\n", name, lineno, scope_count, scope_id_count);
+    exit(1);
+  }
+
     strcpy(symbol_table[symbol_count].name, name);
     strcpy(symbol_table[symbol_count].data_type, kind);
 
@@ -31,18 +52,6 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
     symbol_table[symbol_count].scope_id = scope_id_count;
 
     symbol_count++;
-}
-
-int search_symbol_table(char *name, int scope, int scope_id) {
-    for (int i = 0; i < symbol_count; i++) {
-         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
-            return symbol_table[i].token_type;
-        }
-        else if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
-            return symbol_table[i].token_type;
-        }
-    }
-    return -1; // Return -1 if not found
 }
 
 void displaySymbolTable() {

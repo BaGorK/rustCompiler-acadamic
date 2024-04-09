@@ -3,9 +3,11 @@ use my_module::my_function as func;
 
 fn main() {
     let x;
+    // let x = 2;
     let z = 2;
 
     if number % 2 == 0 {
+        let z;
 
         println!("{} is even.", number);
     } else {
@@ -17,6 +19,8 @@ fn main() {
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
     let w;
+
+    let z = 4;
     return x + y;
 }
 
