@@ -158,19 +158,19 @@ function:FN ID LPAREN parameter RPAREN return_value  block  function
 
 return_value:ARROW return_type | ;
 
-statements: var_decl // {printf("variable declaration\n");}
-          // | print_stmt // {printf("print statement.\n");}
-          // | if_statement // {printf("if statement.\n");}
-          // | if_else_statement // {printf("if else statement.\n");}
-          // | loop_statement // {printf("loop statement\n")}
-          // | for_loop_statement // {printf("for loop statement\n");}
-          // | while_loop_statement // {printf("while loop statement\n");}
-          // | RETURN expression SEMICOLON // {printf("return statement.\n");}
-          // |;  // | println!("Hello!");
+statements: var_decl statements// {printf("variable declaration\n");}
+          | print_stmt statements// {printf("print statement.\n");}
+          | if_statement // {printf("if statement.\n");}
+          | if_else_statement // {printf("if else statement.\n");}
+          | loop_statement // {printf("loop statement\n")}
+          | for_loop_statement // {printf("for loop statement\n");}
+          | while_loop_statement // {printf("while loop statement\n");}
+          | RETURN expression SEMICOLON // {printf("return statement.\n");}
+          |;  // | println!("Hello!");
 
-// print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
-//           | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
-//           |; 
+print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
+          | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
+          |; 
 
 var_decl: LET ID SEMICOLON  {
                       printf("Variable declaration: %s\n", $2);
@@ -184,60 +184,45 @@ var_decl: LET ID SEMICOLON  {
                           add_to_symbol_table(identifier, ID,yylineno); 
                       }
                   };   
-        // | LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;                  // let name;
-        // | LET ID ASSIGN operand SEMICOLON     // let name = 10;
-        // | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
-        // | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
-        // | ;
-
-return_type: INType: INT
-          | FLOAT
-          | BOOL 
-          | STRSLICE
-          | LPAREN RPAREN
-          |;
+        | LET ID ASSIGN operand SEMICOLON     // let name = 10;
+        | LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;                  // let name;
+        | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
+        | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
+        ;
+return_type:INT
           | FLOAT
           | BOOL 
           | STRSLICE
           | LPAREN RPAREN
           |;
 
-// if_statement: IF expression block| ;
 
-// if_else_statement: if_statement ELSE block | ;
+if_statement: IF expression block| ;
 
-// loop_statement: LOOP block loop_statement | ;
+if_else_statement: if_statement ELSE block | ;
 
-// while_loop_statement: WHILE expression block while_loop_statement | ;
+loop_statement: LOOP block loop_statement | ;
 
-// for_loop_statement: FOR ID IN expression block for_loop_statement | ;
+while_loop_statement: WHILE expression block while_loop_statement | ;
+
+for_loop_statement: FOR ID IN expression block for_loop_statement | ;
 
 expression: operand operator operand  // 1 + 4
           | operand operator operand operator operand; // 1 + 4 == 5
-
-          | ID LPAREN parameter RPAREN SEMICOLON //greet("allice");
+          | ID LPAREN parameter RPAREN //greet("allice");
           | ID LPAREN parameter RPAREN   //is_even(number)
-
           | ID PERIOD ID LPAREN  RPAREN   // array.slice() // array.slice(1, 5)
-          | ARRAY SEMICOLON
-
-          // | ID PERIOD ID LPAREN parameter RPAREN 
-          // | ID LPAREN RPAREN SEMICOLON //{printf("function call.\n");}   //is_even();
-          // | ID PERIOD ID LPAREN  RPAREN SEMICOLON  // array.slice();
-          // | ID PERIOD ID LPAREN parameter RPAREN SEMICOLON// array.slice(1, 5);
+          | ARRAY
           | ;
 
 parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
-//          | operand comma parameter // add(3, 4)
-//         //  | operand // add(3)
-//          | ;
+         | operand comma parameter // add(3, 4)
+         | ;
 
-operand: ID 
-    | NUMBER { 
-                char buf[16];
-                sprintf(buf, "%d", $1);
-            }
-    | BOOL | STRING;
+operand:ID 
+    | NUMBER
+    | BOOL 
+    | STRING;
 
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
         | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ | ASSIGN;

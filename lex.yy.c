@@ -647,12 +647,12 @@ void add_to_symbol_table(char *name, int type, int lineno) {
 
 int search_symbol_table(char *name, int scope, int scope_id) {
     for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, name) == 0 
-            && symbol_table[i].scope == scope 
-            && symbol_table[i].scope_id == scope_id
-            ) {
-                return symbol_table[i].token_type; // Return token if found
-            }
+         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
+            return symbol_table[i].token_type;
+        }
+        else if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
+            return symbol_table[i].token_type;
+        }
     }
     return -1; // Return -1 if not found
 }
@@ -1098,7 +1098,7 @@ case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
 #line 106 "scanner.l"
-{strcpy(symbol_table[symbol_count - 1].data_type, "array");  return ARRAY;}
+{return ARRAY;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
