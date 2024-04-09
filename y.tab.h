@@ -190,83 +190,85 @@ typedef
 
 
  #line 169 "/usr/share/bison++/bison.h"
-#define	ID	258
-#define	LET	259
-#define	MUT	260
-#define	ENUM	261
-#define	EXTERN	262
-#define	IMPL	263
-#define	MATCH	264
-#define	PUB	265
-#define	REF	266
-#define	RETURN	267
-#define	SELF	268
-#define	STATIC	269
-#define	SUPER	270
-#define	TRAIT	271
-#define	TYPE	272
-#define	UNSAFE	273
-#define	WHERE	274
-#define	ASYNC	275
-#define	AWAIT	276
-#define	USE	277
-#define	MOD	278
-#define	MAIN	279
-#define	FN	280
-#define	PRINTLN	281
-#define	STRINTERPOLATION	282
-#define	TRUE	283
-#define	FALSE	284
-#define	INT	285
-#define	FLOAT	286
-#define	BOOL	287
-#define	STRUCT	288
-#define	STRING	289
-#define	NUMBER	290
-#define	ARRAY	291
-#define	STRSLICE	292
-#define	ARROW	293
-#define	IF	294
-#define	ELSE	295
-#define	LOOP	296
-#define	WHILE	297
-#define	FOR	298
-#define	IN	299
-#define	BREAK	300
-#define	CONTINUE	301
-#define	AS	302
-#define	LOGICALNOT	303
-#define	LOGICALAND	304
-#define	LOGICALOR	305
-#define	ADD	306
-#define	SUBTRACT	307
-#define	MULTIPLY	308
-#define	DIVIDE	309
-#define	ASSIGN	310
-#define	REMAINDER	311
-#define	ADDEQ	312
-#define	SUBTRACTEQ	313
-#define	MULTIPLYEQ	314
-#define	DIVIDEEQ	315
-#define	REMAINDEREQ	316
-#define	EQUALTO	317
-#define	NOTEQUALTO	318
-#define	GT	319
-#define	GTEQ	320
-#define	LT	321
-#define	LTEQ	322
-#define	SEMICOLON	323
-#define	COMMA	324
-#define	PERIOD	325
-#define	COLON	326
-#define	QUESTION_MARK	327
-#define	LPAREN	328
-#define	RPAREN	329
-#define	LBRACE	330
-#define	RBRACE	331
-#define	LSQUAREBRAC	332
-#define	RSQUAREBRAC	333
-#define	COMMENT	334
+#define	STRING_LITERAL	258
+#define	NUMBER	259
+#define	ID	260
+#define	LET	261
+#define	MUT	262
+#define	ENUM	263
+#define	EXTERN	264
+#define	IMPL	265
+#define	MATCH	266
+#define	PUB	267
+#define	REF	268
+#define	RETURN	269
+#define	SELF	270
+#define	STATIC	271
+#define	SUPER	272
+#define	TRAIT	273
+#define	TYPE	274
+#define	UNSAFE	275
+#define	WHERE	276
+#define	ASYNC	277
+#define	AWAIT	278
+#define	USE	279
+#define	MOD	280
+#define	MAIN	281
+#define	FN	282
+#define	PRINTLN	283
+#define	STRINTERPOLATION	284
+#define	TRUE	285
+#define	FALSE	286
+#define	INT	287
+#define	FLOAT	288
+#define	BOOL	289
+#define	STRUCT	290
+#define	STRINGK	291
+#define	STRING	292
+#define	ARRAY	293
+#define	STRSLICE	294
+#define	ARROW	295
+#define	IF	296
+#define	ELSE	297
+#define	LOOP	298
+#define	WHILE	299
+#define	FOR	300
+#define	IN	301
+#define	BREAK	302
+#define	CONTINUE	303
+#define	AS	304
+#define	LOGICALNOT	305
+#define	LOGICALAND	306
+#define	LOGICALOR	307
+#define	ADD	308
+#define	SUBTRACT	309
+#define	MULTIPLY	310
+#define	DIVIDE	311
+#define	ASSIGN	312
+#define	REMAINDER	313
+#define	ADDEQ	314
+#define	SUBTRACTEQ	315
+#define	MULTIPLYEQ	316
+#define	DIVIDEEQ	317
+#define	REMAINDEREQ	318
+#define	EQUALTO	319
+#define	NOTEQUALTO	320
+#define	GT	321
+#define	GTEQ	322
+#define	LT	323
+#define	LTEQ	324
+#define	SEMICOLON	325
+#define	COMMA	326
+#define	PERIOD	327
+#define	COLON	328
+#define	QUESTION_MARK	329
+#define	LPAREN	330
+#define	RPAREN	331
+#define	LBRACE	332
+#define	RBRACE	333
+#define	LSQUAREBRAC	334
+#define	RSQUAREBRAC	335
+#define	COMMENT	336
 
 
 #line 169 "/usr/share/bison++/bison.h"
@@ -315,6 +317,8 @@ public:
   /* static const int token ... */
   
  #line 212 "/usr/share/bison++/bison.h"
+static const int STRING_LITERAL;
+static const int NUMBER;
 static const int ID;
 static const int LET;
 static const int MUT;
@@ -346,8 +350,8 @@ static const int INT;
 static const int FLOAT;
 static const int BOOL;
 static const int STRUCT;
+static const int STRINGK;
 static const int STRING;
-static const int NUMBER;
 static const int ARRAY;
 static const int STRSLICE;
 static const int ARROW;
@@ -400,83 +404,85 @@ static const int COMMENT;
   enum YY_myparser_ENUM_TOKEN { YY_myparser_NULL_TOKEN=0
   
  #line 215 "/usr/share/bison++/bison.h"
-	,ID=258
-	,LET=259
-	,MUT=260
-	,ENUM=261
-	,EXTERN=262
-	,IMPL=263
-	,MATCH=264
-	,PUB=265
-	,REF=266
-	,RETURN=267
-	,SELF=268
-	,STATIC=269
-	,SUPER=270
-	,TRAIT=271
-	,TYPE=272
-	,UNSAFE=273
-	,WHERE=274
-	,ASYNC=275
-	,AWAIT=276
-	,USE=277
-	,MOD=278
-	,MAIN=279
-	,FN=280
-	,PRINTLN=281
-	,STRINTERPOLATION=282
-	,TRUE=283
-	,FALSE=284
-	,INT=285
-	,FLOAT=286
-	,BOOL=287
-	,STRUCT=288
-	,STRING=289
-	,NUMBER=290
-	,ARRAY=291
-	,STRSLICE=292
-	,ARROW=293
-	,IF=294
-	,ELSE=295
-	,LOOP=296
-	,WHILE=297
-	,FOR=298
-	,IN=299
-	,BREAK=300
-	,CONTINUE=301
-	,AS=302
-	,LOGICALNOT=303
-	,LOGICALAND=304
-	,LOGICALOR=305
-	,ADD=306
-	,SUBTRACT=307
-	,MULTIPLY=308
-	,DIVIDE=309
-	,ASSIGN=310
-	,REMAINDER=311
-	,ADDEQ=312
-	,SUBTRACTEQ=313
-	,MULTIPLYEQ=314
-	,DIVIDEEQ=315
-	,REMAINDEREQ=316
-	,EQUALTO=317
-	,NOTEQUALTO=318
-	,GT=319
-	,GTEQ=320
-	,LT=321
-	,LTEQ=322
-	,SEMICOLON=323
-	,COMMA=324
-	,PERIOD=325
-	,COLON=326
-	,QUESTION_MARK=327
-	,LPAREN=328
-	,RPAREN=329
-	,LBRACE=330
-	,RBRACE=331
-	,LSQUAREBRAC=332
-	,RSQUAREBRAC=333
-	,COMMENT=334
+	,STRING_LITERAL=258
+	,NUMBER=259
+	,ID=260
+	,LET=261
+	,MUT=262
+	,ENUM=263
+	,EXTERN=264
+	,IMPL=265
+	,MATCH=266
+	,PUB=267
+	,REF=268
+	,RETURN=269
+	,SELF=270
+	,STATIC=271
+	,SUPER=272
+	,TRAIT=273
+	,TYPE=274
+	,UNSAFE=275
+	,WHERE=276
+	,ASYNC=277
+	,AWAIT=278
+	,USE=279
+	,MOD=280
+	,MAIN=281
+	,FN=282
+	,PRINTLN=283
+	,STRINTERPOLATION=284
+	,TRUE=285
+	,FALSE=286
+	,INT=287
+	,FLOAT=288
+	,BOOL=289
+	,STRUCT=290
+	,STRINGK=291
+	,STRING=292
+	,ARRAY=293
+	,STRSLICE=294
+	,ARROW=295
+	,IF=296
+	,ELSE=297
+	,LOOP=298
+	,WHILE=299
+	,FOR=300
+	,IN=301
+	,BREAK=302
+	,CONTINUE=303
+	,AS=304
+	,LOGICALNOT=305
+	,LOGICALAND=306
+	,LOGICALOR=307
+	,ADD=308
+	,SUBTRACT=309
+	,MULTIPLY=310
+	,DIVIDE=311
+	,ASSIGN=312
+	,REMAINDER=313
+	,ADDEQ=314
+	,SUBTRACTEQ=315
+	,MULTIPLYEQ=316
+	,DIVIDEEQ=317
+	,REMAINDEREQ=318
+	,EQUALTO=319
+	,NOTEQUALTO=320
+	,GT=321
+	,GTEQ=322
+	,LT=323
+	,LTEQ=324
+	,SEMICOLON=325
+	,COMMA=326
+	,PERIOD=327
+	,COLON=328
+	,QUESTION_MARK=329
+	,LPAREN=330
+	,RPAREN=331
+	,LBRACE=332
+	,RBRACE=333
+	,LSQUAREBRAC=334
+	,RSQUAREBRAC=335
+	,COMMENT=336
 
 
 #line 215 "/usr/share/bison++/bison.h"

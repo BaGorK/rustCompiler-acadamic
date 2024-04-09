@@ -9,7 +9,6 @@
     char data_type[20];
     int token_type;
     int lineno;
-
     int scope;
     int scope_id;
     // Add more attributes as needed
@@ -17,12 +16,15 @@
 
   struct symbol_entry symbol_table[100];
   int symbol_count = 0; // Counter to track the number of entries in symbol table
+
   int scope_count = 0;
   int scope_id_count = 0;
 
-void add_to_symbol_table(char *name, int type, int lineno) {
+void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
     strcpy(symbol_table[symbol_count].name, name);
-    symbol_table[symbol_count].token_type = type;
+    strcpy(symbol_table[symbol_count].data_type, kind);
+
+    symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
 
     symbol_table[scope_count].scope = scope_count;
@@ -71,16 +73,16 @@ letter          [a-zA-Z]
 
 "mut" {return MUT;}
 
-"let" { strcpy(symbol_table[symbol_count].data_type, "variable declaration");  return LET;}
-"main" {add_to_symbol_table(yytext, MAIN, yylineno); return MAIN;}
-"fn" { strcpy(symbol_table[symbol_count].data_type, "function"); return FN;}
-"use" {strcpy(symbol_table[symbol_count].data_type, "function"); return USE;}
-"as" {strcpy(symbol_table[symbol_count].data_type, "variable"); return AS;}
+"let" {  return LET;}
+"main" {yylval.strval = strdup(yytext); return MAIN;}
+"fn" {  return FN;}
+"use" {return USE;}
+"as" {return AS;}
 
-"i32" {strcpy(symbol_table[symbol_count - 1].data_type, "integer number"); return INT;}
-"f64" {strcpy(symbol_table[symbol_count - 1].data_type, "float point number"); return FLOAT;}
-"bool" {strcpy(symbol_table[symbol_count - 1].data_type, "boolean variable"); return BOOL;}
-"&str" {strcpy(symbol_table[symbol_count - 1].data_type, "string"); return STRSLICE;}
+"i32" { return INT;}
+"f64" {return FLOAT;}
+"bool" {yylval.strval = strdup(yytext); return BOOL;}
+"&str" { return STRSLICE;}
 
 "pub" {return PUB;}
 "return" {return RETURN;}
@@ -99,24 +101,18 @@ letter          [a-zA-Z]
 "break" {return BREAK;}
 "continue" {return CONTINUE;}
 
-"String" {return STRING; }
+"String" {return STRINGK; }
 
 "->" {return ARROW;}
 
-\[[^[\]]*\] {return ARRAY;}
+\[[^[\]]*\] {yylval.strval = strdup(yytext);  return ARRAY;}
 
-{digit}+ {yylval.intval = atoi(yytext);  return NUMBER;}
+{digit}+ {yylval.strval = strdup(yytext);  return NUMBER;}
 {letter}((\_|\-)*{letter}|{digit})*  { yylval.strval = strdup(yytext);
-                          int index = search_symbol_table(yytext,-1,-1);
-                          if (index == -1) {
                               return ID;
-                          }
-                          else {
-                              return ID;
-                          }
                         }
                 
-\"[^\"]*\"      { return STRING;}
+\"[^\"]*\"      { yylval.strval = strdup(yytext); return STRING;}
 
 
 "!" {return LOGICALNOT;}
@@ -153,6 +149,7 @@ letter          [a-zA-Z]
 ")" {return RPAREN;}
 
 "{" {symbol_count++; scope_id_count++; return LBRACE;}
+
 "}" {symbol_count--; return RBRACE;}
 
 "[" {return LSQUAREBRAC;}

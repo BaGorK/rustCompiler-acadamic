@@ -2,31 +2,21 @@ use my_module::my_function as func;
 
 
 fn main() {
-    let sum = 1 + 3;
-    // println!("Sum: {}", sum); // Output: Sum: 8
+    let x;
+    let z = 2;
 
-    let number = 7;
     if number % 2 == 0 {
 
         println!("{} is even.", number);
     } else {
         println!("{} is odd.", number);
     } // Output: 7 is odd.
-
-    // TODO
-    // greet("Alice"); // Output: Hello, Alice!
-    // let numbers = [1, 2, 3, 4, 5];
-    
-    // let numbers = [];
-
-    // for num in numbers.iter() {
-    //     println!("Current number: {}", num);
-    // }
 }
 
 
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
+    let w;
     return x + y;
 }
 
@@ -36,8 +26,8 @@ fn add(x: i32, y: i32) -> i32 {
 *
 */
 fn is_even(num: i32) -> bool {
-    let sum =num + 1;
-     println!("{} is even.", sum);
+    let sum3;
+    println!("{} is even.", sum);
    return num % 2 == 0; // Returns true if the number is even, false otherwise
 }
 

@@ -6,9 +6,9 @@
     #include<string.h>
 
 
-extern void add_to_symbol_table(char *name, int type,int line_number);
-extern int search_symbol_table(char *name, int scope, int scope_id);
-extern void displaySymbolTable();
+  extern void add_to_symbol_table(char *name, char *kind, int type,int line_number);
+  extern int search_symbol_table(char *name, int scope, int scope_id);
+  extern void displaySymbolTable();
 
   extern int yylineno;
   extern int scope_count;
@@ -35,14 +35,7 @@ extern void displaySymbolTable();
   char* strval;
 }
 
-// %type <intval> NUMBER
-
-%type <strval> var_decl
-// %type <strval> primary_expression
-
-%token <strval>  ID
-// %token <strval> STRING_LITERAL ID
-// %token <strval> NUMBER
+%token <strval> STRING_LITERAL NUMBER ID
 
 %token LET            //Immutable variable declaration with type annotation     let x: i32 = 42;
 %token MUT            //Mutable variable declaration without initialization let mut z;
@@ -66,7 +59,7 @@ extern void displaySymbolTable();
 %token USE           // you use the use keyword to import items (functions, types, constants, etc.)
 %token MOD          //Importing the module mod my_module;
 
-%token MAIN
+%token <strval> MAIN
 %token FN
 %token PRINTLN
 %token STRINTERPOLATION   // The {} syntax you're referring to is part of Rust's string formatting mechanism.     println!("Hello, {}! You are {} years old.", name, age);
@@ -75,15 +68,13 @@ extern void displaySymbolTable();
 %token TRUE  
 %token FALSE
 
-// %token ID               // Identifier (Variable name)
 %token  INT              // integer type (i32)
 %token FLOAT              // let float: f64 = 3.14;
 %token BOOL             // Boolean type (bool)
 %token STRUCT           // allows to create custom data types
-
-%token STRING
-%token <intval> NUMBER           // NUMBER from 0-9
-%token ARRAY
+%token STRINGK
+%token <strval> STRING
+%token <strval> ARRAY
 
 %token STRSLICE         // String type(&str)
 %token ARROW            // single arrow to specify the return type(->)
@@ -150,13 +141,15 @@ program: import_module statements  main_function  function;
 
 import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
 
-main_function:FN MAIN LPAREN RPAREN block ; //{printf("main function declaration.\n")};
+main_function:FN MAIN {add_to_symbol_table($2, "function", ID, yylineno );}  LPAREN RPAREN block  ; //{printf("main function declaration.\n")};
 
-function:FN ID LPAREN parameter RPAREN return_value  block  function
+function:FN ID {add_to_symbol_table($2, "function", ID, yylineno );} LPAREN parameter RPAREN return_value  block  function
         | // {printf("function declaration.\n")}
         ;
 
 return_value:ARROW return_type | ;
+
+block: LBRACE statements RBRACE;
 
 statements: var_decl statements// {printf("variable declaration\n");}
           | print_stmt statements// {printf("print statement.\n");}
@@ -172,23 +165,13 @@ print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
           | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
           |; 
 
-var_decl: LET ID SEMICOLON  {
-                      printf("Variable declaration: %s\n", $2);
-                      char *identifier = $2;
-                      int token = search_symbol_table(identifier,scope_count,scope_id_count);
-                      if (token != -1) {
-                          printf("Error: Identifier '%s' already exists in the symbol table with token type %d.\n", identifier, token);
-                          yyerror("Identifier already declared");
-                      } else {
-                          printf("Identifier '%s' added to symbol table with token type %d.\n", identifier, ID);
-                          add_to_symbol_table(identifier, ID,yylineno); 
-                      }
-                  };   
-        | LET ID ASSIGN operand SEMICOLON     // let name = 10;
-        | LET ID ASSIGN expression SEMICOLON   //let x = 1 + 2;                  // let name;
-        | LET ID COLON return_type SEMICOLON  // let sum: i32 ;
-        | LET ID COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
+var_decl: LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno);} SEMICOLON
+        | LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno);}  ASSIGN operand SEMICOLON   // let name = 10;
+        | LET ID   {add_to_symbol_table($2, "variable declaration", ID, yylineno);} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
+        | LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno);} COLON return_type SEMICOLON // let sum: i32 ;
+        | LET ID {add_to_symbol_table($2, "variable declaration", ID, yylineno);}  COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
         ;
+
 return_type:INT
           | FLOAT
           | BOOL 
@@ -208,28 +191,26 @@ while_loop_statement: WHILE expression block while_loop_statement | ;
 for_loop_statement: FOR ID IN expression block for_loop_statement | ;
 
 expression: operand operator operand  // 1 + 4
-          | operand operator operand operator operand; // 1 + 4 == 5
-          | ID LPAREN parameter RPAREN //greet("allice");
-          | ID LPAREN parameter RPAREN   //is_even(number)
-          | ID PERIOD ID LPAREN  RPAREN   // array.slice() // array.slice(1, 5)
-          | ARRAY
-          | ;
+          | operand operator operand operator operand // 1 + 4 == 5
+          | operand LPAREN parameter RPAREN //greet("allice");
+          | operand LPAREN parameter RPAREN   //is_even(number)
+          | operand PERIOD operand LPAREN  RPAREN   // array.slice() // array.slice(1, 5)
+          ;
 
-parameter: ID COLON return_type comma parameter //add(x: i32, y: i32) 
-         | operand comma parameter // add(3, 4)
+parameter: ID {add_to_symbol_table($1, "parameter", ID, yylineno);} COLON return_type comma parameter //add(x: i32, y: i32) 
+         | ID  {add_to_symbol_table($1, "parameter", ID, yylineno);}  comma parameter // add(3, 4)
          | ;
 
-operand:ID 
-    | NUMBER
-    | BOOL 
-    | STRING;
+operand: ID 
+         | NUMBER
+         | STRING
+         | BOOL;
 
 operator: LOGICALNOT | LOGICALAND | LOGICALOR | ADD | SUBTRACT | MULTIPLY | DIVIDE | REMAINDER | ADDEQ | SUBTRACTEQ
         | MULTIPLYEQ | DIVIDEEQ | REMAINDEREQ | EQUALTO |NOTEQUALTO | GT | GTEQ | LT | LTEQ | ASSIGN;
 
 comma: COMMA | ;
 
-block: LBRACE expression RBRACE | LBRACE statements RBRACE;
 
 
 %%
