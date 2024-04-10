@@ -35,6 +35,15 @@ int search_symbol_table(char *name, int scope, int scope_id) {
     return -1; // Return -1 if not found
 }
 
+char* search_by_name(char *name) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            return symbol_table[i].name;
+        }
+    }
+    return "NULL"; // Return -1 if not found
+}
+
 int search_functions_symbol_table(char *name, int scope) {
     for (int i = 0; i < symbol_count; i++) {
         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope) {

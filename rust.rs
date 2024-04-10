@@ -2,9 +2,15 @@ use my_module::my_function as func;
 
 
 fn main() {
+//    let val = add(3, 3);
     let x;
-    // let x = 2;
+    let number = 2;
     let z : i32;
+    let b : bool;
+    let s : &str;
+    let f : f64;
+    println!("name: {}", number);
+    // println!("name: {}", UN);
 
     if number % 2 == 0 {
         // let z;
@@ -18,18 +24,20 @@ fn main() {
 // Function returning an integer
 fn add(x: i32, y: i32) -> i32 {
     let w;
+        let x;
+
 
     let z = 4;
     return x + y;
 }
 
-// Function returning an integer
-fn add1(x: i32, y: i32) -> i32 {
-    let w;
+// // Function returning an integer
+// fn add1(x: i32, y: i32) -> i32 {
+//     let w;
 
-    let z = 4;
-    return x + y;
-}
+//     let z = 4;
+//     return x + y;
+// }
 
 // Function returning a boolean
 
