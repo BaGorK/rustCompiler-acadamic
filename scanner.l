@@ -6,6 +6,7 @@
 
   struct symbol_entry {
     char name[50];
+    char kind[20];
     char data_type[20];
     int token_type;
     int lineno;
@@ -35,7 +36,7 @@ int search_symbol_table(char *name, int scope, int scope_id) {
 }
 
 
-void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
+void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char *datatype) {
   int index = search_symbol_table(name, scope_count, scope_id_count);
   if (index != -1) {
     printf("Error: Variable %s already declared in the same scope at line number %d with scope of %d and scope id of %d\n", name, lineno, scope_count, scope_id_count);
@@ -43,7 +44,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
   }
 
     strcpy(symbol_table[symbol_count].name, name);
-    strcpy(symbol_table[symbol_count].data_type, kind);
+    strcpy(symbol_table[symbol_count].kind, kind);
+    strcpy(symbol_table[symbol_count].data_type, datatype);
 
     symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
@@ -58,10 +60,10 @@ void displaySymbolTable() {
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("%-25s | %-25s | %-20s |%-15s |%-15s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|");
+    printf("%-25s | %-25s | %-20s |%-15s |%-15s |%-15s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|", "data type|");
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("| %-25s | %-25s | %-20d |%-15d |%-15d |%-15d |\n", symbol_table[i].name,     symbol_table[i].data_type, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id);
+     printf("| %-25s | %-25s | %-20d |%-15d |%-15d |%-15d | %-25s |\n", symbol_table[i].name,     symbol_table[i].kind, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id, symbol_table[i].data_type);
 
     }
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");

@@ -4,7 +4,7 @@ use my_module::my_function as func;
 fn main() {
     let x;
     // let x = 2;
-    let z = 2;
+    let z : i32;
 
     if number % 2 == 0 {
         let z;
