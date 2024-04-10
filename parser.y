@@ -7,6 +7,7 @@
 
 
   extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype);
+  extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
   extern int search_symbol_table(char *name, int scope, int scope_id);
   extern void displaySymbolTable();
 
@@ -143,7 +144,10 @@ import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMI
 
 main_function:FN MAIN LPAREN RPAREN block  ; //{printf("main function declaration.\n")};
 
-function:FN ID {add_to_symbol_table($2, "function", ID, yylineno, "" );} LPAREN parameter RPAREN return_value  block  function
+function:FN ID {
+            add_functions_to_symbol_table($2, "function", ID, yylineno );
+            } 
+        LPAREN parameter RPAREN return_value  block  function
         | // {printf("function declaration.\n")}
         ;
 
@@ -165,12 +169,12 @@ print_stmt: PRINTLN LPAREN operand COMMA operand RPAREN SEMICOLON
           | PRINTLN LPAREN operand RPAREN SEMICOLON // | println!("Hello!");
           |; 
 
-var_decl: LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");} SEMICOLON
-        | LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");}  ASSIGN operand SEMICOLON   // let name = 10;
-        | LET ID   {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
-        | LET ID  {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");} COLON return_type SEMICOLON // let sum: i32 ;
-        | LET ID {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");}  COLON return_type ASSIGN operand SEMICOLON //  let id : i32 = 1 + 3;
-        | LET ID {add_to_symbol_table($2, "variable declaration", ID, yylineno, "dynamic");}  COLON return_type ASSIGN expression SEMICOLON //  let id : i32 = 1 + 3;
+var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} SEMICOLON
+        | LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");}  ASSIGN operand SEMICOLON   // let name = 10;
+        | LET ID   {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
+        | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} // let sum: i32 ;
+        | LET ID  COLON return_type ASSIGN operand SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");}//  let id : i32 = 1 + 3;
+        | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} //  let id : i32 = 1 + 3;
         ;
 
 return_type:INT

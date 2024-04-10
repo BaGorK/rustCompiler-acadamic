@@ -35,6 +35,15 @@ int search_symbol_table(char *name, int scope, int scope_id) {
     return -1; // Return -1 if not found
 }
 
+int search_functions_symbol_table(char *name, int scope) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope) {
+            return symbol_table[i].token_type;
+        }
+    }
+    return -1; // Return -1 if not found
+}
+
 
 void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char *datatype) {
   int index = search_symbol_table(name, scope_count, scope_id_count);
@@ -56,14 +65,33 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     symbol_count++;
 }
 
+void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
+  int index = search_functions_symbol_table(name, scope_count);
+  if (index != -1) {
+    printf("Function Redeclaration Error: function %s already declared in the same scope at line number %d with scope of %d\n", name, lineno, scope_count);
+    exit(1);
+  }
+
+    strcpy(symbol_table[symbol_count].name, name);
+    strcpy(symbol_table[symbol_count].kind, kind);
+
+    symbol_table[symbol_count].token_type = tokentype;
+    symbol_table[symbol_count].lineno = lineno;
+
+    symbol_table[symbol_count].scope = scope_count;
+    symbol_table[symbol_count].scope_id = scope_id_count;
+
+    symbol_count++;
+}
+
 void displaySymbolTable() {
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("%-25s | %-25s | %-20s |%-15s |%-15s |%-15s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|", "data type|");
+    printf("%-15s | %-15s | %-15s |%-15s |%-15s |%-15s |%-15s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|", "data type|");
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("| %-25s | %-25s | %-20d |%-15d |%-15d |%-15d | %-25s |\n", symbol_table[i].name,     symbol_table[i].kind, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id, symbol_table[i].data_type);
+     printf("| %-15s | %-15s | %-15d |%-15d |%-15d |%-15d | %-15s |\n", symbol_table[i].name,symbol_table[i].kind, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id, symbol_table[i].data_type);
 
     }
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -90,10 +118,10 @@ letter          [a-zA-Z]
 "use" {return USE;}
 "as" {return AS;}
 
-"i32" { return INT;}
-"f64" {return FLOAT;}
+"i32" { yylval.strval = strdup(yytext); return INT;}
+"f64" {yylval.strval = strdup(yytext); return FLOAT;}
 "bool" {yylval.strval = strdup(yytext); return BOOL;}
-"&str" { return STRSLICE;}
+"&str" {yylval.strval = strdup(yytext);  return STRSLICE;}
 
 "pub" {return PUB;}
 "return" {return RETURN;}
