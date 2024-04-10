@@ -187,7 +187,12 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");
         | LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");}  ASSIGN operand SEMICOLON   // let name = 10;
         | LET ID   {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} // let sum: i32 ;
-        | LET ID  COLON return_type ASSIGN operand SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, $4);}//  let id : i32 = 1 + 3;
+        | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
+          printf("%s",$4);
+          printf("%s",$6);
+          printf("\n");
+          add_to_symbol_table($2, "variable", ID, yylineno, $4);
+        }//  let id : i32 = 1 + 3;
         | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} //  let id : i32 = 1 + 3;
         ;
 
