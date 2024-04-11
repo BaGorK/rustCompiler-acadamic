@@ -74,32 +74,32 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
 }
 
 
-char* get_data_type(char* token_name) {
-    for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, token_name) == 0) {
-            if (strlen(symbol_table[i].data_type) > 0) {
-                return symbol_table[i].data_type;
-            } else {
-                return "UNKNOWN";
-            }
-        }
-    }
-    return "UNKNOWN";
-}
+// char* get_data_type(char* token_name) {
+//     for (int i = 0; i < symbol_count; i++) {
+//         if (strcmp(symbol_table[i].name, token_name) == 0) {
+//             if (strlen(symbol_table[i].data_type) > 0) {
+//                 return symbol_table[i].data_type;
+//             } else {
+//                 return "UNKNOWN";
+//             }
+//         }
+//     }
+//     return "UNKNOWN";
+// }
 
-bool check_constant_type_For_String(char *name){
-  if(strcmp(get_data_type(name),"string")==0){
-    return true;
- }
- return false;
-}
+// bool check_constant_type_For_String(char *name){
+//   if(strcmp(get_data_type(name),"string")==0){
+//     return true;
+//  }
+//  return false;
+// }
 
-bool check_constant_type_For_Number(char *name){
-  if(strcmp(get_data_type(name),"int")==0 || strcmp(get_data_type(name),"double")==0){
-    return true;
- }
- return false;
-}
+// bool check_constant_type_For_Number(char *name){
+//   if(strcmp(get_data_type(name),"int")==0 || strcmp(get_data_type(name),"double")==0){
+//     return true;
+//  }
+//  return false;
+// }
 
 void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
   int index = search_functions_symbol_table(name, scope_count);

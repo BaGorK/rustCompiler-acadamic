@@ -190,6 +190,12 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");
         | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
           printf("%s",$4);
           printf("%s",$6);
+          //   if(isdigit($6) != 0 && strcmp($4, "i32") == 0) {
+          //     printf("checked");
+          // } else {
+          //   printf("Type Error: at line num %d\n", yylineno);
+          //   exit(1);
+          // }
           printf("\n");
           add_to_symbol_table($2, "variable", ID, yylineno, $4);
         }//  let id : i32 = 1 + 3;

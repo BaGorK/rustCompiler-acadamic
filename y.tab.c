@@ -854,12 +854,12 @@ static const short yyrline[] = { 0,
    141,   143,   143,   143,   145,   145,   147,   150,   151,   154,
    154,   156,   158,   159,   160,   161,   162,   163,   164,   165,
    166,   167,   169,   176,   177,   184,   186,   187,   187,   187,
-   188,   188,   189,   190,   196,   199,   200,   201,   202,   203,
-   206,   206,   208,   208,   210,   210,   212,   212,   214,   214,
-   216,   217,   218,   219,   222,   223,   224,   224,   224,   225,
-   227,   234,   235,   236,   237,   239,   239,   239,   239,   239,
-   239,   239,   239,   239,   239,   240,   240,   240,   240,   240,
-   240,   240,   240,   240,   240,   242,   242
+   188,   188,   189,   190,   202,   205,   206,   207,   208,   209,
+   212,   212,   214,   214,   216,   216,   218,   218,   220,   220,
+   222,   223,   224,   225,   228,   229,   230,   230,   230,   231,
+   233,   240,   241,   242,   243,   245,   245,   245,   245,   245,
+   245,   245,   245,   245,   245,   246,   246,   246,   246,   246,
+   246,   246,   246,   246,   246,   248,   248
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1543,24 +1543,30 @@ case 34:
 {
           printf("%s",yyvsp[-3].strval);
           printf("%s",yyvsp[-1].strval);
+          //   if(isdigit($6) != 0 && strcmp($4, "i32") == 0) {
+          //     printf("checked");
+          // } else {
+          //   printf("Type Error: at line num %d\n", yylineno);
+          //   exit(1);
+          // }
           printf("\n");
           add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval);
         ;
     break;}
 case 35:
-#line 196 "parser.y"
+#line 202 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval);;
     break;}
 case 56:
-#line 223 "parser.y"
+#line 229 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval);;
     break;}
 case 58:
-#line 224 "parser.y"
+#line 230 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic");;
     break;}
 case 61:
-#line 227 "parser.y"
+#line 233 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1773,7 +1779,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 246 "parser.y"
+#line 252 "parser.y"
 
 
 
