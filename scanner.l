@@ -3,6 +3,8 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
+  #include <ctype.h>
+
 
   struct symbol_entry {
     char name[50];

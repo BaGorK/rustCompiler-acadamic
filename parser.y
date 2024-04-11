@@ -1,9 +1,11 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <ctype.h>
+    #include <regex.h>
+    #include<string.h>
     extern int yylex();
     int yyerror(char* s);
-    #include<string.h>
 
 
   extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype);
@@ -187,17 +189,27 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");
         | LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");}  ASSIGN operand SEMICOLON   // let name = 10;
         | LET ID   {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} // let sum: i32 ;
-        | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
-          printf("%s",$4);
-          printf("%s",$6);
-          //   if(isdigit($6) != 0 && strcmp($4, "i32") == 0) {
-          //     printf("checked");
-          // } else {
-          //   printf("Type Error: at line num %d\n", yylineno);
-          //   exit(1);
-          // }
-          printf("\n");
-          add_to_symbol_table($2, "variable", ID, yylineno, $4);
+        | LET ID  COLON return_type ASSIGN STRING SEMICOLON  {
+            //   regex_t regex;
+            //   int reti;
+            //   char msgbuf[100];
+            //   /* Compile regular expression */
+            //   reti = regcomp(&regex, "\\\".*\\\"", 0);
+            //   if (reti) {
+            //       fprintf(stderr, "Could not compile regex\n");
+            //       exit(1);
+            //   }
+            //   /* Execute regular expression */
+            // reti = regexec(&regex, $6, 0, NULL, 0); // 0 if string and 1 if not string
+            // printf("%d\n",reti);
+            // if (strcmp("i32",$4) == 0 && strcmp("\"num\"",$6) == 0 && !(reti == 0)) {
+            //   printf("Type Error: at line num %d\n", yylineno);
+            //   exit(1);
+            // } else {
+            //   printf("checked");
+            // }
+              printf("\n");
+              add_to_symbol_table($2, "variable", ID, yylineno, $4);
         }//  let id : i32 = 1 + 3;
         | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} //  let id : i32 = 1 + 3;
         ;
