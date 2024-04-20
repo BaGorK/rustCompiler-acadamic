@@ -158,7 +158,6 @@ letter          [a-zA-Z]
 "mut" {return MUT;}
 
 "let" {  return LET;}
-"main" {yylval.strval = strdup(yytext); return MAIN;}
 "fn" {  return FN;}
 "use" {return USE;}
 "as" {return AS;}

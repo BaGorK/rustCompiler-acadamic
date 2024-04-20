@@ -140,11 +140,11 @@
 %start program
 %%
 
-program: import_module statements  main_function  function;
+program: import_module  function;
 
 import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
 
-main_function:FN MAIN LPAREN RPAREN block |  ; //{printf("main function declaration.\n")};
+// main_function:FN MAIN LPAREN RPAREN block |  ; //{printf("main function declaration.\n")};
 
 function:FN ID {
             add_functions_to_symbol_table($2, "function", ID, yylineno );
