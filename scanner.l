@@ -66,11 +66,18 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     strcpy(symbol_table[symbol_count].kind, kind);
     strcpy(symbol_table[symbol_count].data_type, datatype);
 
+
+
     symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
 
     symbol_table[symbol_count].scope = scope_count;
     symbol_table[symbol_count].scope_id = scope_id_count;
+
+    if(strcmp("parameter", kind) == 0) {
+      symbol_table[symbol_count].scope = scope_count + 1;
+      symbol_table[symbol_count].scope_id = scope_id_count + 1;
+    }
 
     symbol_count++;
 }

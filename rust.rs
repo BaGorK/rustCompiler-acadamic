@@ -34,6 +34,7 @@ fn main() {
 // // Function returning an integer
 fn add1(x: i32, y: i32) -> i32 {
     let w;
+    let x;
 
     let z = 4;
     return x + y;
