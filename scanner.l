@@ -74,10 +74,32 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     symbol_table[symbol_count].scope = scope_count;
     symbol_table[symbol_count].scope_id = scope_id_count;
 
+    if(strcmp("i32", datatype) == 0) {
+      strcpy(symbol_table[symbol_count].data_type, "Integer");
+    }
+
+    if(strcmp("bool", datatype) == 0) {
+      strcpy(symbol_table[symbol_count].data_type, "Boolean");
+    }
+
+    if(strcmp("&str", datatype) == 0) {
+      strcpy(symbol_table[symbol_count].data_type, "String");
+    }
+    if(strcmp("f64", datatype) == 0) {
+      strcpy(symbol_table[symbol_count].data_type, "Integer");
+    }
+
+    
+
     if(strcmp("parameter", kind) == 0) {
       symbol_table[symbol_count].scope = scope_count + 1;
       symbol_table[symbol_count].scope_id = scope_id_count + 1;
     }
+
+    // if(strcmp("main", name) == 0) {
+    //   // printf("main function");
+    //   strcpy(symbol_table[symbol_count].data_type, "MAIN FN");
+    // }
 
     symbol_count++;
 }
