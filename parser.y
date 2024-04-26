@@ -140,7 +140,7 @@
 %start program
 %%
 
-program: import_module  function;
+program: import_module var_decl  function;
 
 import_module: USE ID COLON COLON ID SEMICOLON| USE ID COLON COLON ID AS ID SEMICOLON | ; // {printf("importing modules.\n")};
 
@@ -186,7 +186,7 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           |; 
 
 var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} SEMICOLON
-        | LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");}  ASSIGN operand SEMICOLON   // let name = 10;
+        | LET ID  ASSIGN operand {printf("%s\n", $4);add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} SEMICOLON   // let name = 10;
         | LET ID   {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} // let sum: i32 ;
         | LET ID  COLON return_type ASSIGN STRING SEMICOLON  {
@@ -212,7 +212,7 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");
               add_to_symbol_table($2, "variable", ID, yylineno, $4);
         }//  let id : i32 = 1 + 3;
         | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} //  let id : i32 = 1 + 3;
-        ;
+        |;
 
 return_type:INT
           | FLOAT
