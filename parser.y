@@ -8,7 +8,7 @@
     int yyerror(char* s);
 
 
-  extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype);
+  extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype, char *value);
   extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
   extern int search_symbol_table(char *name, int scope, int scope_id);
   extern char* search_by_name(char *name);
@@ -185,11 +185,11 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
               } // | println!("Hello!");
           |; 
 
-var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} SEMICOLON
-        | LET ID  ASSIGN operand {printf("%s\n", $4);add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} SEMICOLON   // let name = 10;
-        | LET ID   {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");} ASSIGN expression SEMICOLON//let x = 1 + 2;                  // let name;
-        | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} // let sum: i32 ;
-        | LET ID  COLON return_type ASSIGN STRING SEMICOLON  {
+var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");} SEMICOLON
+        | LET ID  ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
+        | LET ID   ASSIGN expression SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");}//let x = 1 + 2;                  // let name;
+        | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
+        | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
             //   regex_t regex;
             //   int reti;
             //   char msgbuf[100];
@@ -208,10 +208,13 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic");
             // } else {
             //   printf("checked");
             // }
-              printf("\n");
-              add_to_symbol_table($2, "variable", ID, yylineno, $4);
+              // printf("Hello\n");
+              // if(strcmp($4, "i32") == 0) {
+              //  printf("$6");
+              // }
+              add_to_symbol_table($2, "variable", ID, yylineno, $4, $6);
         }//  let id : i32 = 1 + 3;
-        | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4);} //  let id : i32 = 1 + 3;
+        | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} //  let id : i32 = 1 + 3;
         |;
 
 return_type:INT
@@ -238,8 +241,8 @@ expression: operand operator operand  // 1 + 4
           ;
 
 parameter: operand comma // greet("allice", 30)
-         | ID COLON return_type comma {add_to_symbol_table($1, "parameter", ID, yylineno, $3);}  parameter  //add(x: i32, y: i32) 
-         | ID  {add_to_symbol_table($1, "parameter", ID, yylineno, "dynamic");}  comma parameter // add(3, 4)
+         | ID COLON return_type comma {add_to_symbol_table($1, "parameter", ID, yylineno, $3, "");}  parameter  //add(x: i32, y: i32) 
+         | ID  {add_to_symbol_table($1, "parameter", ID, yylineno, "dynamic", "");}  comma parameter // add(3, 4)
          | ;
 
 operand:   ID {
