@@ -10,13 +10,13 @@ let someValue = "random";
 // }
 
 fn main() {
-    let num : i32 = 4 + 3;
+    let num : i32 = 4;
     let name : i32 = someValue;
 
     let number = 2;
-    // let b : bool;
-    // let s : &str;
-    // let f : f64;
+    let b : bool;
+    let s : &str;
+    let f : f64;
     println!("name: {}", name);
 
     if number % 2 == 0 {

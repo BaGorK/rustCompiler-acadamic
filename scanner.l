@@ -15,6 +15,7 @@
     int scope;
     int scope_id;
     char value[30];
+    char checkType[30];
     // Add more attributes as needed
   };
 
@@ -23,6 +24,7 @@
 
   int scope_count = 0;
   int scope_id_count = 0;
+  char *check_type = "val";
 
 
 int search_symbol_table(char *name, int scope, int scope_id) {
@@ -62,6 +64,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     printf("Error: Variable %s already declared in the same scope at line number %d with scope of %d and scope id of %d\n", name, lineno, scope_count, scope_id_count);
     exit(1);
   }
+
+    strcpy(symbol_table[symbol_count].checkType, check_type);
 
     strcpy(symbol_table[symbol_count].name, name);
     strcpy(symbol_table[symbol_count].kind, kind);
@@ -113,39 +117,12 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
           }
 
           strcpy(symbol_table[symbol_count].value, symbol_table[i].value);
+          strcpy(symbol_table[symbol_count].checkType, symbol_table[i].checkType);
         }
       }
     }
     symbol_count++;
 }
-
-
-// char* get_data_type(char* token_name) {
-//     for (int i = 0; i < symbol_count; i++) {
-//         if (strcmp(symbol_table[i].name, token_name) == 0) {
-//             if (strlen(symbol_table[i].data_type) > 0) {
-//                 return symbol_table[i].data_type;
-//             } else {
-//                 return "UNKNOWN";
-//             }
-//         }
-//     }
-//     return "UNKNOWN";
-// }
-
-// bool check_constant_type_For_String(char *name){
-//   if(strcmp(get_data_type(name),"string")==0){
-//     return true;
-//  }
-//  return false;
-// }
-
-// bool check_constant_type_For_Number(char *name){
-//   if(strcmp(get_data_type(name),"int")==0 || strcmp(get_data_type(name),"double")==0){
-//     return true;
-//  }
-//  return false;
-// }
 
 void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
   int index = search_functions_symbol_table(name, scope_count);
@@ -170,10 +147,10 @@ void displaySymbolTable() {
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("%-13s | %-13s | %-14s |%-14s |%-14s |%-14s |%-14s |%-13s\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|", "data type|", "Value|");
+    printf("%-13s | %-13s | %-14s |%-14s |%-14s |%-14s |%-14s |%-13s |%-13s |\n", "| TOKEN NAME ", "| Type |", "Token Type |" , "Line Number |" , "Scope Number |", "Scope Id|", "data type|", "Value|", "Check type");
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < symbol_count; i++) {
-     printf("| %-13s | %-13s | %-13d |%-13d |%-13d |%-13d | %-13s | %-13s\n", symbol_table[i].name,symbol_table[i].kind, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id, symbol_table[i].data_type, symbol_table[i].value);
+     printf("| %-13s | %-13s | %-13d |%-13d |%-13d |%-13d | %-13s | %-13s | %-13s|\n", symbol_table[i].name,symbol_table[i].kind, symbol_table[i].token_type, symbol_table[i].lineno, symbol_table[i].scope, symbol_table[i].scope_id, symbol_table[i].data_type, symbol_table[i].value, symbol_table[i].checkType);
 
     }
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -189,8 +166,8 @@ digit           [0-9]
 letter          [a-zA-Z]
  
 %%
-"true" {return TRUE;}
-"false" {return FALSE;}
+"true" {check_type = "Boolean"; return TRUE;}
+"false" {check_type = "Boolean"; return FALSE;}
 
 "mut" {return MUT;}
 
@@ -227,13 +204,12 @@ letter          [a-zA-Z]
 
 \[[^[\]]*\] {yylval.strval = strdup(yytext);  return ARRAY;}
 
-{digit}+ {yylval.strval = strdup(yytext);  return NUMBER;}
+{digit}+ {yylval.strval = strdup(yytext); check_type = "Integer";  return NUMBER;}
 {letter}((\_|\-)*{letter}|{digit})*  { yylval.strval = strdup(yytext);
                               return ID;
                         }
                 
-\"[^\"]*\"      { yylval.strval = strdup(yytext); return STRING;}
-
+\"[^\"]*\"      { yylval.strval = strdup(yytext); check_type = "String"; return STRING;}
 
 "!" {return LOGICALNOT;}
 "&&" {return LOGICALAND;}
