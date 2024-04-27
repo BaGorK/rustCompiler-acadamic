@@ -65,7 +65,9 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     exit(1);
   }
 
+  if(strcmp(value, "") != 0) {
     strcpy(symbol_table[symbol_count].checkType, check_type);
+  }
 
     strcpy(symbol_table[symbol_count].name, name);
     strcpy(symbol_table[symbol_count].kind, kind);
