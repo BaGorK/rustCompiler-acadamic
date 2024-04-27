@@ -1,6 +1,6 @@
 use my_module::my_function as func;
  
-let someValue: &str = 4;
+let someValue: &str;
 
 // // // Function returning an integer
 // fn add1(x: i32, y: i32) -> i32 {
