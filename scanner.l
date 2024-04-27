@@ -143,7 +143,7 @@ void update_assignment_values(char *name, char *newValue) {
     if(strcmp(symbol_table[i].name, name) == 0) {
       if(strcmp(symbol_table[i].data_type, check_type) != 0 
        && strcmp(symbol_table[i].data_type, "dynamic") != 0) {
-          printf("\n\n\nDATA TYPE MISMATCH ERROR : you tried to assign a value with a data type of \t\"%s\" to a value with a data type of \t\"%s\" at line number \t\"%d\n\n\n", symbol_table[i].data_type, check_type, 25);
+          printf("\n\n\nDATA TYPE MISMATCH ERROR : you tried to assign a value with a data type of \t\"%s\" to a value with a data type of \t\"%s\" at line number \t\"%d\n\n\n", symbol_table[i].data_type, check_type, yylineno);
           exit(1);
         }
       strcpy(symbol_table[i].value, newValue);

@@ -177,6 +177,21 @@ assignment: ID ASSIGN operand SEMICOLON {
       exit(1);
   }
   update_assignment_values($1, $3);
+} | ID ASSIGN TRUE SEMICOLON  {
+  char *name1= strdup(search_by_name($1));
+  if(strcmp(name1,"NULL") == 0){
+      printf("\n\n\n\nVARIABLE NOT DECLARED ERROR: Variable %s is not declared at line num %d\n\n\n", $1, yylineno);
+      exit(1);
+  }
+  update_assignment_values($1, "true");
+}
+  | ID ASSIGN FALSE SEMICOLON  {
+  char *name1= strdup(search_by_name($1));
+  if(strcmp(name1,"NULL") == 0){
+      printf("\n\n\n\nVARIABLE NOT DECLARED ERROR: Variable %s is not declared at line num %d\n\n\n", $1, yylineno);
+      exit(1);
+  }
+  update_assignment_values($1, "false");
 };
 
 print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
@@ -197,7 +212,7 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           |; 
 
 var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");} SEMICOLON
-        | LET ID ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "Boolean", "true");}
+        | LET ID ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
         | LET ID ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
         | LET ID COLON return_type ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "true");}
         | LET ID COLON return_type ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "false");}

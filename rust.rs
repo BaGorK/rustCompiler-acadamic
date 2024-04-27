@@ -13,6 +13,8 @@ fn main() {
     //FIXME: Syntax Error occured at line 13: parse error
     let boolVar = true;
     let boolVar2 : bool = false;
+    //TODO: ALSO FOR BOOLEAN ASSIGNMENT
+    boolVar = "some";
 
     let num : &str = someValue;
     let name : &str = someValue;
@@ -25,6 +27,12 @@ fn main() {
     //TODO: TWO FEATURE REASSIGN A VARIABLE
     // AND CHECK IT'S DATA TYPE
     test = 4;
+
+    //TODO: ALSO FOR BOOLEANS
+    test = true;
+
+    //TODO: ALSO FOR STRINGS
+    test = "another";
     println!("name: {}", name);
 
     if number % 2 == 0 {
@@ -34,4 +42,3 @@ fn main() {
         println!("{} is odd.", number);
     }
 }
-
