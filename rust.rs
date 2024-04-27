@@ -1,6 +1,6 @@
 use my_module::my_function as func;
  
-let someValue: &str = "String";
+let someValue = "random";
 
 // // // Function returning an integer
 // fn add1(x: i32, y: i32) -> i32 {
@@ -10,10 +10,9 @@ let someValue: &str = "String";
 // }
 
 fn main() {
-    let num : i32 = 43;
+    let num : i32 = 4 + 3;
     let name : i32 = someValue;
 
-    // let name = "bagor";
     let number = 2;
     // let b : bool;
     // let s : &str;

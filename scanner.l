@@ -106,12 +106,11 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
             exit(1);
           }
           //TODO: TYPE CHECK
-          if(strcmp(symbol_table[i].data_type, symbol_table[symbol_count].data_type) != 0) {
+          if(strcmp(symbol_table[i].data_type, symbol_table[symbol_count].data_type) != 0 && strcmp(symbol_table[i].data_type, "dynamic") != 0 ) {
             printf("\n\n\nDATA TYPE MISMATCH ");
             printf(":Error ocured at line number %d. You tried to assign a variable \"%s\" with a data type of \"%s\" that is declared at line number \"%d\" to a variable \"%s\" with data type of \"%s\" that is declared at line number \"%d\".\n\n\n", lineno, symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].lineno, name, symbol_table[symbol_count].data_type, lineno);
             exit(1);
           }
-
 
           strcpy(symbol_table[symbol_count].value, symbol_table[i].value);
         }
