@@ -2,18 +2,19 @@ use my_module::my_function as func;
  
 let someValue: &str = "random";
 
-// // // Function returning an integer
-// fn add1(x: i32, y: i32) -> i32 {
-//     let w;
-//     let z = 4;
-//     return x + y;
-// }
+// // Function returning an integer
+fn add1(x: i32, y: i32) -> i32 {
+    let w;
+    let z = 4;
+    return x + y;
+}
 
 fn main() {
     //TODO: Syntax Error occured at line 13: parse error
-    // let boolVar = true;
+    let boolVar = true;
+    let boolVar2 : bool = false;
 
-    let num : i32 = 4;
+    let num : &str = someValue;
     let name : &str = someValue;
 
     let number = 2;

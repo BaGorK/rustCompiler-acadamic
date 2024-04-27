@@ -186,6 +186,10 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           |; 
 
 var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");} SEMICOLON
+        | LET ID ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "Boolean", "true");}
+        | LET ID ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
+        | LET ID COLON return_type ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "true");}
+        | LET ID COLON return_type ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "false");}
         | LET ID  ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
         | LET ID   ASSIGN expression SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");}//let x = 1 + 2;                  // let name;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
@@ -229,7 +233,7 @@ operand:   ID {
                     printf("Error: Variable %s is not declared at line num %d\n", $1, yylineno);
                     exit(1);
                 }
-}
+              }
          | NUMBER
          | STRING
          | BOOL
