@@ -74,17 +74,6 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     symbol_table[symbol_count].scope = scope_count;
     symbol_table[symbol_count].scope_id = scope_id_count;
 
-    if(strcmp(search_by_name(value), "NULL") != 0) {
-      for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i].name, value) == 0) {
-          if(strcmp(symbol_table[i].value, "") == 0) {
-            printf("\n\n\n\nError: Variable %s is has not been initialized at line num %d \tYou can not assign a variable that is not initialized already.\t You tried to assign a variable called %s on Line number %d to a variable %s.\n\n\n\n", value, symbol_table[i].lineno, symbol_table[i].name, yylineno, name );
-            exit(1);
-          }
-          strcpy(symbol_table[symbol_count].value, symbol_table[i].value);
-      }
-    }
-    }
 
     if(strcmp("i32", datatype) == 0) {
       strcpy(symbol_table[symbol_count].data_type, "Integer");
@@ -108,11 +97,26 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
       symbol_table[symbol_count].scope_id = scope_id_count + 1;
     }
 
-    // if(strcmp("main", name) == 0) {
-    //   // printf("main function");
-    //   strcpy(symbol_table[symbol_count].data_type, "MAIN FN");
-    // }
+    if(strcmp(search_by_name(value), "NULL") != 0) {
+      for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, value) == 0) {
+          //TODO: new feature
+          if(strcmp(symbol_table[i].value, "") == 0) {
+            printf("\n\n\n\nError: Variable %s is has not been initialized at line num %d \tYou can not assign a variable that is not initialized already.\t You tried to assign a variable called %s on Line number %d to a variable %s.\n\n\n\n", value, symbol_table[i].lineno, symbol_table[i].name, yylineno, name );
+            exit(1);
+          }
+          //TODO: TYPE CHECK
+          if(strcmp(symbol_table[i].data_type, symbol_table[symbol_count].data_type) != 0) {
+            printf("\n\n\nDATA TYPE MISMATCH ");
+            printf(":Error ocured at line number %d. You tried to assign a variable \"%s\" with a data type of \"%s\" that is declared at line number \"%d\" to a variable \"%s\" with data type of \"%s\" that is declared at line number \"%d\".\n\n\n", lineno, symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].lineno, name, symbol_table[symbol_count].data_type, lineno);
+            exit(1);
+          }
 
+
+          strcpy(symbol_table[symbol_count].value, symbol_table[i].value);
+        }
+      }
+    }
     symbol_count++;
 }
 
