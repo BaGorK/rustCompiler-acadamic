@@ -65,9 +65,11 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     exit(1);
   }
 
-  if(strcmp(value, "") != 0) {
-    strcpy(symbol_table[symbol_count].checkType, check_type);
-  }
+    if(strcmp(value, "") != 0) {
+      strcpy(symbol_table[symbol_count].checkType, check_type);
+    }
+
+
 
     strcpy(symbol_table[symbol_count].name, name);
     strcpy(symbol_table[symbol_count].kind, kind);
@@ -113,8 +115,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
           }
           //TODO: TYPE CHECK
           if(strcmp(symbol_table[i].data_type, symbol_table[symbol_count].data_type) != 0 && strcmp(symbol_table[i].data_type, "dynamic") != 0 ) {
-            printf("\n\n\nDATA TYPE MISMATCH ");
-            printf(":Error ocured at line number %d. You tried to assign a variable \"%s\" with a data type of \"%s\" that is declared at line number \"%d\" to a variable \"%s\" with data type of \"%s\" that is declared at line number \"%d\".\n\n\n", lineno, symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].lineno, name, symbol_table[symbol_count].data_type, lineno);
+            printf("\n\n\nDATA TYPE MISMATCH Error: ");
+            printf("Error ocured at line number %d. You tried to assign a variable \"%s\" with a data type of \"%s\" that is declared at line number \"%d\" to a variable \"%s\" with data type of \"%s\" that is declared at line number \"%d\".\n\n\n", lineno, symbol_table[i].name, symbol_table[i].data_type, symbol_table[i].lineno, name, symbol_table[symbol_count].data_type, lineno);
             exit(1);
           }
 
@@ -123,6 +125,14 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
         }
       }
     }
+
+    //TODO: added new feature
+    if(strcmp(symbol_table[symbol_count].data_type, symbol_table[symbol_count].checkType) != 0 && strcmp(symbol_table[symbol_count].data_type, "dynamic") != 0) {
+      printf("\n\n\nDATA TYPE MISMATCH ERROR :");
+      printf(" Error occured at line number %d. You tried to assing a value with a data type of \"%s\" to a variable called \"%s\" with data type of %s at line number %d.\n\n\n", lineno, symbol_table[symbol_count].checkType, name, symbol_table[symbol_count].data_type, lineno);
+      exit(1);
+    }
+
     symbol_count++;
 }
 

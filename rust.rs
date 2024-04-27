@@ -10,6 +10,9 @@ let someValue = "random";
 // }
 
 fn main() {
+    //TODO: Syntax Error occured at line 13: parse error
+    // let boolVar = true;
+
     let num : i32 = 4;
     let name : i32 = someValue;
 
