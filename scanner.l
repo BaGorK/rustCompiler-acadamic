@@ -138,6 +138,20 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     symbol_count++;
 }
 
+void update_assignment_values(char *name, char *newValue) {
+  for (int i = 0; i < symbol_count; i++) {
+    if(strcmp(symbol_table[i].name, name) == 0) {
+      if(strcmp(symbol_table[i].data_type, check_type) != 0 
+       && strcmp(symbol_table[i].data_type, "dynamic") != 0) {
+          printf("\n\n\nDATA TYPE MISMATCH ERROR : you tried to assign a value with a data type of \t\"%s\" to a value with a data type of \t\"%s\" at line number \t\"%d\n\n\n", symbol_table[i].data_type, check_type, 25);
+          exit(1);
+        }
+      strcpy(symbol_table[i].value, newValue);
+      strcpy(symbol_table[i].checkType, check_type);
+    }
+  }
+}
+
 void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
   int index = search_functions_symbol_table(name, scope_count);
   if (index != -1) {

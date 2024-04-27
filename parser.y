@@ -11,6 +11,7 @@
   extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype, char *value);
   extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
   extern int search_symbol_table(char *name, int scope, int scope_id);
+  extern void update_assignment_values(char *name, char *newValue);
   extern char* search_by_name(char *name);
 
   extern int yylineno;
@@ -158,6 +159,7 @@ return_value:ARROW return_type | ;
 block: LBRACE statements RBRACE;
 
 statements: var_decl statements// {printf("variable declaration\n");}
+          | assignment statements
           | print_stmt statements// {printf("print statement.\n");}
           | if_statement // {printf("if statement.\n");}
           | if_else_statement // {printf("if else statement.\n");}
@@ -168,10 +170,19 @@ statements: var_decl statements// {printf("variable declaration\n");}
           | ID LPAREN parameter RPAREN SEMICOLON statements// {printf("function call statement.\n");}
           |;  // | println!("Hello!");
 
+assignment: ID ASSIGN operand SEMICOLON {
+  char *name1= strdup(search_by_name($1));
+  if(strcmp(name1,"NULL") == 0){
+      printf("\n\n\n\nVARIABLE NOT DECLARED ERROR: Variable %s is not declared at line num %d\n\n\n", $1, yylineno);
+      exit(1);
+  }
+  update_assignment_values($1, $3);
+};
+
 print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
                 char *name= strdup(search_by_name($5));
                 if(strcmp(name,"NULL") == 0){
-                    printf("Error: Variable %s is not declared at line num %d\n", $5, yylineno);
+                    printf("\n\n\nVARIABLE NOT DECLARED ERROR: Variable %s is not declared at line num %d\n\n\n", $5, yylineno);
                     exit(1);
                 }
 }
@@ -179,7 +190,7 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           | PRINTLN LPAREN operand RPAREN SEMICOLON {
                 char *name= strdup(search_by_name($3));
                 if(strcmp(name,"NULL") == 0){
-                    printf("Error: Variable %s is not declared at line num %d\n", $3, yylineno);
+                    printf("\n\n\nVARIABLE NOT DECLARED Error: Variable %s is not declared at line num %d\n\n\n", $3, yylineno);
                     exit(1);
                 }
               } // | println!("Hello!");
@@ -230,7 +241,7 @@ parameter: operand comma // greet("allice", 30)
 operand:   ID {
                 char *name1= strdup(search_by_name($1));
                 if(strcmp(name1,"NULL") == 0){
-                    printf("Error: Variable %s is not declared at line num %d\n", $1, yylineno);
+                    printf("\n\n\nVARIABLE NOT DECLARED ERROR: Variable %s is not declared at line num %d\n\n\n", $1, yylineno);
                     exit(1);
                 }
               }
