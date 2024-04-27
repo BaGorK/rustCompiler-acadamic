@@ -855,12 +855,12 @@ static const short yyrline[] = { 0,
    143,   145,   145,   145,   149,   152,   153,   156,   156,   158,
    160,   161,   162,   163,   164,   165,   166,   167,   168,   169,
    171,   178,   179,   186,   188,   189,   189,   190,   190,   191,
-   192,   217,   218,   220,   221,   222,   223,   224,   227,   227,
-   229,   229,   231,   231,   233,   233,   235,   235,   237,   238,
-   239,   240,   243,   244,   245,   245,   245,   246,   248,   255,
-   256,   257,   258,   260,   260,   260,   260,   260,   260,   260,
-   260,   260,   260,   261,   261,   261,   261,   261,   261,   261,
-   261,   261,   261,   263,   263
+   192,   195,   196,   198,   199,   200,   201,   202,   205,   205,
+   207,   207,   209,   209,   211,   211,   213,   213,   215,   216,
+   217,   218,   221,   222,   223,   223,   223,   224,   226,   233,
+   234,   235,   236,   238,   238,   238,   238,   238,   238,   238,
+   238,   238,   238,   239,   239,   239,   239,   239,   239,   239,
+   239,   239,   239,   241,   241
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1540,45 +1540,23 @@ case 30:
 case 31:
 #line 192 "parser.y"
 {
-            //   regex_t regex;
-            //   int reti;
-            //   char msgbuf[100];
-            //   /* Compile regular expression */
-            //   reti = regcomp(&regex, "\\\".*\\\"", 0);
-            //   if (reti) {
-            //       fprintf(stderr, "Could not compile regex\n");
-            //       exit(1);
-            //   }
-            //   /* Execute regular expression */
-            // reti = regexec(&regex, $6, 0, NULL, 0); // 0 if string and 1 if not string
-            // printf("%d\n",reti);
-            // if (strcmp("i32",$4) == 0 && strcmp("\"num\"",$6) == 0 && !(reti == 0)) {
-            //   printf("Type Error: at line num %d\n", yylineno);
-            //   exit(1);
-            // } else {
-            //   printf("checked");
-            // }
-              // printf("Hello\n");
-              // if(strcmp($4, "i32") == 0) {
-              //  printf("$6");
-              // }
-              add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
+            add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
         ;
     break;}
 case 32:
-#line 217 "parser.y"
+#line 195 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "");;
     break;}
 case 54:
-#line 244 "parser.y"
+#line 222 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 56:
-#line 245 "parser.y"
+#line 223 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic", "");;
     break;}
 case 59:
-#line 248 "parser.y"
+#line 226 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1791,7 +1769,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 267 "parser.y"
+#line 245 "parser.y"
 
 
 

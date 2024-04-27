@@ -190,29 +190,7 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
         | LET ID   ASSIGN expression SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");}//let x = 1 + 2;                  // let name;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
         | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
-            //   regex_t regex;
-            //   int reti;
-            //   char msgbuf[100];
-            //   /* Compile regular expression */
-            //   reti = regcomp(&regex, "\\\".*\\\"", 0);
-            //   if (reti) {
-            //       fprintf(stderr, "Could not compile regex\n");
-            //       exit(1);
-            //   }
-            //   /* Execute regular expression */
-            // reti = regexec(&regex, $6, 0, NULL, 0); // 0 if string and 1 if not string
-            // printf("%d\n",reti);
-            // if (strcmp("i32",$4) == 0 && strcmp("\"num\"",$6) == 0 && !(reti == 0)) {
-            //   printf("Type Error: at line num %d\n", yylineno);
-            //   exit(1);
-            // } else {
-            //   printf("checked");
-            // }
-              // printf("Hello\n");
-              // if(strcmp($4, "i32") == 0) {
-              //  printf("$6");
-              // }
-              add_to_symbol_table($2, "variable", ID, yylineno, $4, $6);
+            add_to_symbol_table($2, "variable", ID, yylineno, $4, $6);
         }//  let id : i32 = 1 + 3;
         | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} //  let id : i32 = 1 + 3;
         |;

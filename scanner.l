@@ -68,13 +68,19 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     strcpy(symbol_table[symbol_count].data_type, datatype);
     strcpy(symbol_table[symbol_count].value, value);
 
-
-
     symbol_table[symbol_count].token_type = tokentype;
     symbol_table[symbol_count].lineno = lineno;
 
     symbol_table[symbol_count].scope = scope_count;
     symbol_table[symbol_count].scope_id = scope_id_count;
+
+    if(strcmp(search_by_name(value), "NULL") != 0) {
+      for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, value) == 0) {
+          strcpy(symbol_table[symbol_count].value, symbol_table[i].value);
+      }
+    }
+    }
 
     if(strcmp("i32", datatype) == 0) {
       strcpy(symbol_table[symbol_count].data_type, "Integer");
