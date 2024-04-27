@@ -1,6 +1,6 @@
 use my_module::my_function as func;
  
-let someValue = "random";
+let someValue: &str = "random";
 
 // // // Function returning an integer
 // fn add1(x: i32, y: i32) -> i32 {
@@ -14,7 +14,7 @@ fn main() {
     // let boolVar = true;
 
     let num : i32 = 4;
-    let name : i32 = someValue;
+    let name : &str = someValue;
 
     let number = 2;
     let b : bool;
