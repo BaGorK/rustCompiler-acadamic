@@ -12,6 +12,7 @@
   extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
   extern int search_symbol_table(char *name, int scope, int scope_id);
   extern void update_assignment_values(char *name, char *newValue);
+  extern char* compareDataType(char *id1, char *id2);
   extern char* search_by_name(char *name);
 
   extern int yylineno;
@@ -161,12 +162,12 @@ block: LBRACE statements RBRACE;
 statements: var_decl statements// {printf("variable declaration\n");}
           | assignment statements
           | print_stmt statements// {printf("print statement.\n");}
-          | if_statement // {printf("if statement.\n");}
-          | if_else_statement // {printf("if else statement.\n");}
-          | loop_statement // {printf("loop statement\n")}
-          | for_loop_statement // {printf("for loop statement\n");}
-          | while_loop_statement // {printf("while loop statement\n");}
-          | RETURN expression SEMICOLON // {printf("return statement.\n");}
+          | if_statement statements// {printf("if statement.\n");}
+          | if_else_statement statements// {printf("if else statement.\n");}
+          | loop_statement statements// {printf("loop statement\n")}
+          | for_loop_statement statements// {printf("for loop statement\n");}
+          | while_loop_statement statements// {printf("while loop statement\n");}
+          | RETURN expression SEMICOLON statements// {printf("return statement.\n");}
           | ID LPAREN parameter RPAREN SEMICOLON statements// {printf("function call statement.\n");}
           |;  // | println!("Hello!");
 
@@ -216,8 +217,20 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
         | LET ID ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
         | LET ID COLON return_type ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "true");}
         | LET ID COLON return_type ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "false");}
-        | LET ID  ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
-        | LET ID   ASSIGN expression SEMICOLON  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");}//let x = 1 + 2;                  // let name;
+        | LET ID ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
+        | LET ID ASSIGN operand operator operand SEMICOLON  {
+          char *name1= strdup(search_by_name($4));
+          char *name2= strdup(search_by_name($6));
+
+          // if $4 and $6 are Id, then they must be declared in the symbol table so I can check their check type
+          if(strcmp(name1,"NULL") != 0,strcmp(name2,"NULL") != 0) {
+            if (strcmp(compareDataType($4, $6), "true") != 0) {
+              printf("\n\nDATA TYPE MISMATCH ERROR: Data type of %s and %s does not match at line num %d. You tried to operate on two different data type values. \n\n", $4, $6, yylineno);
+              exit(1);
+            }
+          }
+            add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
+          }//let x = 1 + 2;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
         | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
             add_to_symbol_table($2, "variable", ID, yylineno, $4, $6);

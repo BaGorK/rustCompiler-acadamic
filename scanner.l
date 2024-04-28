@@ -49,6 +49,29 @@ char* search_by_name(char *name) {
     return "NULL"; // Return -1 if not found
 }
 
+char* compareDataType(char *id1, char *id2) {
+  char *type_for_id1 = "";
+  char *type_for_id2 = "";
+
+  for (int i = 0; i < symbol_count; i++) {
+      if(strcmp(symbol_table[i].name, id1) == 0) {
+        type_for_id1 = symbol_table[i].checkType;
+      }
+      if(strcmp(symbol_table[i].name, id2) == 0) {
+        type_for_id2 = symbol_table[i].checkType;
+      }
+  }
+
+  printf("Type for id1: %s\n", type_for_id1);
+  printf("Type for id2: %s\n", type_for_id2);
+
+  if(strcmp(type_for_id1, type_for_id2) == 0) {
+    return "true";
+  } else {
+    return "false";
+  }
+}
+
 int search_functions_symbol_table(char *name, int scope) {
     for (int i = 0; i < symbol_count; i++) {
         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope) {
@@ -151,6 +174,8 @@ void update_assignment_values(char *name, char *newValue) {
     }
   }
 }
+
+
 
 void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
   int index = search_functions_symbol_table(name, scope_count);

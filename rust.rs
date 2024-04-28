@@ -1,6 +1,8 @@
 use my_module::my_function as func;
+
+//TODO:
+let valId : &str = 5 + "str";
  
-let someValue: &str = "STRING VAL";
 
 // // Function returning an integer
 fn add1(x: i32, y: i32) -> i32 {
@@ -9,7 +11,9 @@ fn add1(x: i32, y: i32) -> i32 {
     return x + y;
 }
 
+
 fn main() {
+    let someValue: &str = "STRING VAL";
     //FIXME: Syntax Error occured at line 13: parse error
     let boolVar = true;
     let boolVar2 : bool = false;
@@ -20,6 +24,7 @@ fn main() {
     let name : &str = someValue;
 
     let number = 2;
+    let number2: i32 = 6;
     let b : bool;
     let s : &str;
     let f : f64;
@@ -41,4 +46,7 @@ fn main() {
     } else {
         println!("{} is odd.", number);
     }
+
+    //TODO: CHECK DATA TYPE OF VARIABLE ASSIGNMENT
+    let adding = number * number2;
 }
