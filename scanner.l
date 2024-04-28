@@ -6,6 +6,7 @@
   #include <ctype.h>
 
 
+
   struct symbol_entry {
     char name[50];
     char kind[20];
@@ -27,7 +28,10 @@
   char *check_type = "val";
 
 
-int search_symbol_table(char *name, int scope, int scope_id) {
+
+
+
+  int search_symbol_table(char *name, int scope, int scope_id) {
     for (int i = 0; i < symbol_count; i++) {
         //  if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
         //     return symbol_table[i].token_type;
@@ -38,39 +42,47 @@ int search_symbol_table(char *name, int scope, int scope_id) {
         }
     }
     return -1; // Return -1 if not found
-}
+  }
 
-char* search_by_name(char *name) {
+
+
+
+
+  char* search_by_name(char *name) {
     for (int i = 0; i < symbol_count; i++) {
         if (strcmp(symbol_table[i].name, name) == 0) {
             return symbol_table[i].name;
         }
     }
     return "NULL"; // Return -1 if not found
-}
-
-char* compareDataType(char *id1, char *id2) {
-  char *type_for_id1 = "";
-  char *type_for_id2 = "";
-
-  for (int i = 0; i < symbol_count; i++) {
-      if(strcmp(symbol_table[i].name, id1) == 0) {
-        type_for_id1 = symbol_table[i].checkType;
-      }
-      if(strcmp(symbol_table[i].name, id2) == 0) {
-        type_for_id2 = symbol_table[i].checkType;
-      }
   }
 
-  printf("Type for id1: %s\n", type_for_id1);
-  printf("Type for id2: %s\n", type_for_id2);
 
-  if(strcmp(type_for_id1, type_for_id2) == 0) {
-    return "true";
-  } else {
-    return "false";
+
+
+
+  char* compareDataType(char *id1, char *id2) {
+    char *type_for_id1 = "";
+    char *type_for_id2 = "";
+
+    for (int i = 0; i < symbol_count; i++) {
+        if(strcmp(symbol_table[i].name, id1) == 0) {
+          type_for_id1 = symbol_table[i].checkType;
+        }
+        if(strcmp(symbol_table[i].name, id2) == 0) {
+          type_for_id2 = symbol_table[i].checkType;
+        }
+    }
+
+    if(strcmp(type_for_id1, type_for_id2) == 0) {
+      return type_for_id1;
+    } else {
+      return "";
+    }
   }
-}
+
+
+
 
 int search_functions_symbol_table(char *name, int scope) {
     for (int i = 0; i < symbol_count; i++) {
@@ -80,6 +92,9 @@ int search_functions_symbol_table(char *name, int scope) {
     }
     return -1; // Return -1 if not found
 }
+
+
+
 
 void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char *datatype, char *value) {
   int index = search_symbol_table(name, scope_count, scope_id_count);
@@ -161,6 +176,8 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     symbol_count++;
 }
 
+
+
 void update_assignment_values(char *name, char *newValue) {
   for (int i = 0; i < symbol_count; i++) {
     if(strcmp(symbol_table[i].name, name) == 0) {
@@ -196,6 +213,8 @@ void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int li
     symbol_count++;
 }
 
+
+
 void displaySymbolTable() {
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
@@ -208,6 +227,7 @@ void displaySymbolTable() {
     }
     printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
 }
+
 
 
 %}

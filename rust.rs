@@ -49,4 +49,7 @@ fn main() {
 
     //TODO: CHECK DATA TYPE OF VARIABLE ASSIGNMENT
     let adding = number * number2;
+    // adding = 8;
+
+    // let test = 4 + "num";
 }

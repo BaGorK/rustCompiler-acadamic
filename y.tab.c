@@ -863,13 +863,13 @@ static const short yyrline[] = { 0,
    145,   147,   147,   147,   151,   154,   155,   158,   158,   160,
    162,   163,   164,   165,   166,   167,   168,   169,   170,   171,
    172,   174,   181,   189,   198,   205,   206,   213,   215,   216,
-   216,   217,   218,   219,   220,   221,   221,   234,   235,   238,
-   239,   241,   242,   243,   244,   245,   248,   248,   250,   250,
-   252,   252,   254,   254,   256,   256,   258,   259,   260,   261,
-   264,   265,   266,   266,   266,   267,   269,   276,   277,   278,
-   279,   281,   281,   281,   281,   281,   281,   281,   281,   281,
-   281,   282,   282,   282,   282,   282,   282,   282,   282,   282,
-   282,   284,   284
+   216,   217,   218,   219,   220,   221,   221,   235,   236,   239,
+   240,   242,   243,   244,   245,   246,   249,   249,   251,   251,
+   253,   253,   255,   255,   257,   257,   259,   260,   261,   262,
+   265,   266,   267,   267,   267,   268,   270,   277,   278,   279,
+   280,   282,   282,   282,   282,   282,   282,   282,   282,   282,
+   282,   283,   283,   283,   283,   283,   283,   283,   283,   283,
+   283,   285,   285
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1608,8 +1608,9 @@ case 37:
           char *name2= strdup(search_by_name(yyvsp[-1].strval));
 
           // if $4 and $6 are Id, then they must be declared in the symbol table so I can check their check type
+          char *data_type_of_operands = compareDataType(yyvsp[-3].strval, yyvsp[-1].strval);
           if(strcmp(name1,"NULL") != 0,strcmp(name2,"NULL") != 0) {
-            if (strcmp(compareDataType(yyvsp[-3].strval, yyvsp[-1].strval), "true") != 0) {
+            if (strcmp(data_type_of_operands, "") == 0) {
               printf("\n\nDATA TYPE MISMATCH ERROR: Data type of %s and %s does not match at line num %d. You tried to operate on two different data type values. \n\n", yyvsp[-3].strval, yyvsp[-1].strval, yylineno);
               exit(1);
             }
@@ -1618,29 +1619,29 @@ case 37:
           ;
     break;}
 case 38:
-#line 234 "parser.y"
+#line 235 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 39:
-#line 235 "parser.y"
+#line 236 "parser.y"
 {
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
         ;
     break;}
 case 40:
-#line 238 "parser.y"
+#line 239 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "");;
     break;}
 case 62:
-#line 265 "parser.y"
+#line 266 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 64:
-#line 266 "parser.y"
+#line 267 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic", "");;
     break;}
 case 67:
-#line 269 "parser.y"
+#line 270 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1853,7 +1854,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 288 "parser.y"
+#line 289 "parser.y"
 
 
 

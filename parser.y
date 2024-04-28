@@ -223,8 +223,9 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
           char *name2= strdup(search_by_name($6));
 
           // if $4 and $6 are Id, then they must be declared in the symbol table so I can check their check type
+          char *data_type_of_operands = compareDataType($4, $6);
           if(strcmp(name1,"NULL") != 0,strcmp(name2,"NULL") != 0) {
-            if (strcmp(compareDataType($4, $6), "true") != 0) {
+            if (strcmp(data_type_of_operands, "") == 0) {
               printf("\n\nDATA TYPE MISMATCH ERROR: Data type of %s and %s does not match at line num %d. You tried to operate on two different data type values. \n\n", $4, $6, yylineno);
               exit(1);
             }
