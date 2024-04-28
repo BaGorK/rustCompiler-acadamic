@@ -121,6 +121,14 @@ Maintained by Magnus Ekdahl <magnus@debian.org>
   extern int scope_count;
   extern int scope_id_count;
 
+  struct check_type_entry {
+    char value[40];
+    char checkType[40];
+  };
+
+  extern struct check_type_entry check_table[300];
+  extern int symbol_count_check_table ;
+
   extern FILE *yyin;
   extern int yylex();
 
@@ -133,7 +141,7 @@ Maintained by Magnus Ekdahl <magnus@debian.org>
   #define YYSTYPE_IS_DECLARED
 
 
-#line 38 "parser.y"
+#line 46 "parser.y"
 typedef union {
   int intval;
   char* strval;
@@ -860,16 +868,16 @@ static const short yyrhs[] = {    83,
 
 #if (YY_myparser_DEBUG != 0) || defined(YY_myparser_ERROR_VERBOSE) 
 static const short yyrline[] = { 0,
-   145,   147,   147,   147,   151,   154,   155,   158,   158,   160,
-   162,   163,   164,   165,   166,   167,   168,   169,   170,   171,
-   172,   174,   181,   189,   198,   205,   206,   213,   215,   216,
-   216,   217,   218,   219,   220,   221,   221,   235,   236,   239,
-   240,   242,   243,   244,   245,   246,   249,   249,   251,   251,
-   253,   253,   255,   255,   257,   257,   259,   260,   261,   262,
-   265,   266,   267,   267,   267,   268,   270,   277,   278,   279,
-   280,   282,   282,   282,   282,   282,   282,   282,   282,   282,
-   282,   283,   283,   283,   283,   283,   283,   283,   283,   283,
-   283,   285,   285
+   153,   155,   155,   155,   159,   162,   163,   166,   166,   168,
+   170,   171,   172,   173,   174,   175,   176,   177,   178,   179,
+   180,   182,   189,   197,   206,   213,   214,   221,   223,   224,
+   224,   225,   226,   227,   228,   229,   229,   246,   247,   250,
+   251,   253,   254,   255,   256,   257,   260,   260,   262,   262,
+   264,   264,   266,   266,   268,   268,   270,   271,   272,   273,
+   276,   277,   278,   278,   278,   279,   281,   288,   289,   290,
+   291,   293,   293,   293,   293,   293,   293,   293,   293,   293,
+   293,   294,   294,   294,   294,   294,   294,   294,   294,   294,
+   294,   296,   296
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1519,13 +1527,13 @@ YYLABEL(yyreduce)
   switch (yyn) {
 
 case 5:
-#line 151 "parser.y"
+#line 159 "parser.y"
 {
             add_functions_to_symbol_table(yyvsp[0].strval, "function", ID, yylineno );
             ;
     break;}
 case 22:
-#line 174 "parser.y"
+#line 182 "parser.y"
 {
   char *name1= strdup(search_by_name(yyvsp[-3].strval));
   if(strcmp(name1,"NULL") == 0){
@@ -1536,7 +1544,7 @@ case 22:
 ;
     break;}
 case 23:
-#line 181 "parser.y"
+#line 189 "parser.y"
 {
   char *name1= strdup(search_by_name(yyvsp[-3].strval));
   if(strcmp(name1,"NULL") == 0){
@@ -1547,7 +1555,7 @@ case 23:
 ;
     break;}
 case 24:
-#line 189 "parser.y"
+#line 197 "parser.y"
 {
   char *name1= strdup(search_by_name(yyvsp[-3].strval));
   if(strcmp(name1,"NULL") == 0){
@@ -1558,7 +1566,7 @@ case 24:
 ;
     break;}
 case 25:
-#line 198 "parser.y"
+#line 206 "parser.y"
 {
                 char *name= strdup(search_by_name(yyvsp[-2].strval));
                 if(strcmp(name,"NULL") == 0){
@@ -1568,7 +1576,7 @@ case 25:
 ;
     break;}
 case 27:
-#line 206 "parser.y"
+#line 214 "parser.y"
 {
                 char *name= strdup(search_by_name(yyvsp[-2].strval));
                 if(strcmp(name,"NULL") == 0){
@@ -1578,31 +1586,31 @@ case 27:
               ;
     break;}
 case 29:
-#line 215 "parser.y"
+#line 223 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "variable", ID, yylineno, "dynamic", "");;
     break;}
 case 31:
-#line 216 "parser.y"
+#line 224 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, "dynamic", "true");;
     break;}
 case 32:
-#line 217 "parser.y"
+#line 225 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, "dynamic", "true");;
     break;}
 case 33:
-#line 218 "parser.y"
+#line 226 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "true");;
     break;}
 case 34:
-#line 219 "parser.y"
+#line 227 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "false");;
     break;}
 case 35:
-#line 220 "parser.y"
+#line 228 "parser.y"
 {add_to_symbol_table(yyvsp[-2].strval, "variable", ID, yylineno, "dynamic", yyvsp[0].strval);;
     break;}
 case 37:
-#line 221 "parser.y"
+#line 229 "parser.y"
 {
           char *name1= strdup(search_by_name(yyvsp[-3].strval));
           char *name2= strdup(search_by_name(yyvsp[-1].strval));
@@ -1615,33 +1623,36 @@ case 37:
               exit(1);
             }
           }
+
+          // check data type mismatch for values that are not IDs like let test = 4 + "str";
+            printf("%s\n%s\n\n\n", yyvsp[-3].strval, yyvsp[-1].strval);
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, "dynamic", "");
           ;
     break;}
 case 38:
-#line 235 "parser.y"
+#line 246 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 39:
-#line 236 "parser.y"
+#line 247 "parser.y"
 {
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
         ;
     break;}
 case 40:
-#line 239 "parser.y"
+#line 250 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "");;
     break;}
 case 62:
-#line 266 "parser.y"
+#line 277 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 64:
-#line 267 "parser.y"
+#line 278 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic", "");;
     break;}
 case 67:
-#line 270 "parser.y"
+#line 281 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1854,7 +1865,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 289 "parser.y"
+#line 300 "parser.y"
 
 
 

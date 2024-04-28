@@ -27,6 +27,13 @@
   int scope_id_count = 0;
   char *check_type = "val";
 
+  struct check_type_entry {
+    char value[40];
+    char checkType[40];
+  };
+
+  struct check_type_entry check_table[300];
+  int symbol_count_check_table = 0;
 
 
 
@@ -213,9 +220,12 @@ void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int li
     symbol_count++;
 }
 
-
-
 void displaySymbolTable() {
+
+  for (int i = 0; i < symbol_count_check_table; i++) {
+    printf("%s\t %s\n",check_table[i].value,check_table[i].checkType);
+  }
+
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -229,6 +239,12 @@ void displaySymbolTable() {
 }
 
 
+void add_values_to_check_table(char *value, char *type){
+  strcpy(check_table[symbol_count_check_table].value, value);
+  strcpy(check_table[symbol_count_check_table].checkType, type);
+
+  symbol_count_check_table++;
+}
 
 %}
 
@@ -239,8 +255,8 @@ digit           [0-9]
 letter          [a-zA-Z]
  
 %%
-"true" {check_type = "Boolean"; return TRUE;}
-"false" {check_type = "Boolean"; return FALSE;}
+"true" {check_type = "Boolean"; add_values_to_check_table(strdup(yytext), check_type); return TRUE;}
+"false" {check_type = "Boolean"; add_values_to_check_table(strdup(yytext), check_type); return FALSE;}
 
 "mut" {return MUT;}
 
@@ -277,12 +293,12 @@ letter          [a-zA-Z]
 
 \[[^[\]]*\] {yylval.strval = strdup(yytext);  return ARRAY;}
 
-{digit}+ {yylval.strval = strdup(yytext); check_type = "Integer";  return NUMBER;}
+{digit}+ {yylval.strval = strdup(yytext); check_type = "Integer"; add_values_to_check_table(strdup(yytext), check_type);  return NUMBER;}
 {letter}((\_|\-)*{letter}|{digit})*  { yylval.strval = strdup(yytext);
                               return ID;
                         }
                 
-\"[^\"]*\"      { yylval.strval = strdup(yytext); check_type = "String"; return STRING;}
+\"[^\"]*\"      { yylval.strval = strdup(yytext); check_type = "String"; add_values_to_check_table(strdup(yytext), check_type); return STRING;}
 
 "!" {return LOGICALNOT;}
 "&&" {return LOGICALAND;}

@@ -51,5 +51,5 @@ fn main() {
     let adding = number * number2;
     // adding = 8;
 
-    // let test = 4 + "num";
+    let test = 4 + "num";
 }

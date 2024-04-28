@@ -20,6 +20,14 @@
   extern int scope_count;
   extern int scope_id_count;
 
+  struct check_type_entry {
+    char value[40];
+    char checkType[40];
+  };
+
+  extern struct check_type_entry check_table[300];
+  extern int symbol_count_check_table ;
+
   extern FILE *yyin;
   extern int yylex();
 
@@ -230,6 +238,9 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
               exit(1);
             }
           }
+
+          // check data type mismatch for values that are not IDs like let test = 4 + "str";
+            printf("%s\n%s\n\n\n", $4, $6);
             add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
           }//let x = 1 + 2;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
