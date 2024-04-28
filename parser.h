@@ -13,7 +13,7 @@
 
  #line 8 "/usr/share/bison++/bison.h"
 
-#line 52 "parser.y"
+#line 47 "parser.y"
 typedef union {
   int intval;
   char* strval;

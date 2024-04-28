@@ -2,11 +2,14 @@ use my_module::my_function as func;
 
 //TODO:
 let valId : &str = 5 + "str";
+
+// let varR = 4
  
 
 // // Function returning an integer
 fn add1(x: i32, y: i32) -> i32 {
     let w;
+
     let z = 4;
     return x + y;
 }
@@ -23,7 +26,7 @@ fn main() {
     // let num : &str = someValue;
     let name : &str = someValue;
 
-    let number = 2;
+    let number = 1;
     let number2: i32 = 6;
     let b : bool;
     let special;
@@ -56,6 +59,10 @@ fn main() {
     //TODO: DATA TYPE CHECK FOR DIFFERENT DATA TYPES IMPLEMENTED
     // let test = 4 + "num";
 
-    let num = 4 + 3;
-
+    // FIXME:
+    // let num = "4" / "5";
+    
+    
+    //TODO: VARIABLE USAGE BEFORE INITIALIZATION
+    // random = 4;
 }

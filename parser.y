@@ -7,11 +7,6 @@
     extern int yylex();
     int yyerror(char* s);
 
-    #pragma warn -par
-    #pragma warn -rch
-    #pragma warn -rvl
-    
-
 
   extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype, char *value);
   extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
@@ -166,12 +161,19 @@ function:FN ID {
             add_functions_to_symbol_table($2, "function", ID, yylineno );
             } 
         LPAREN parameter RPAREN return_value  block  function
-        | // {printf("function declaration.\n")}
+        | //ID {
+            // printf("ERROR Syntax Error Occured: You tried to declare a variable without fn Keyword! at line num %d \t Please use fn before the function name.\n", yylineno);
+            // printf("error ocured");
+            // exit(1);
+            // } LPAREN parameter RPAREN return_value  block  function
+        // |
         ;
+
 
 return_value:ARROW return_type | ;
 
-block: LBRACE statements RBRACE;
+block: LBRACE statements RBRACE 
+      // | statements RBRACE {printf("left brance missed"); exit(1);};
 
 statements: var_decl statements// {printf("variable declaration\n");}
           | assignment statements
@@ -227,6 +229,7 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           |; 
 
 var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");} SEMICOLON
+        | LET ID {printf("mising semicolon"); exit(1);}
         | LET ID ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
         | LET ID ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "true");}
         | LET ID COLON return_type ASSIGN TRUE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "true");}
@@ -247,19 +250,22 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
           }
 
           // check data type mismatch for values that are not IDs like let test = 4 + "str";
-          // printf("\n\n\n%s\n\n\n\n",check_table[symbol_count_check_table - 2].checkType );
           if(strcmp(check_table[symbol_count_check_table - 2].value, $4) == 0 && strcmp(check_table[symbol_count_check_table - 1].value, $6) == 0 ) {
             // check if they have the same data type
-            if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){
+            if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){              
               printf("\n\nDATA TYPE MISMATCH ERROR: You tried to operate on two different variables with a diferent data type.\tvalue one called \"%s\" with a data type of \"%s\" to an other value called \"%s\" with a data type \"%s\"\n\n\n\n",check_table[symbol_count_check_table - 2].value,check_table[symbol_count_check_table - 2].checkType,check_table[symbol_count_check_table - 1].value, check_table[symbol_count_check_table - 1].checkType );
                exit(1);
             }
-
-            // check if one of theme is a string => you cannot perform operations
-            // if(strcmp(check_table[symbol_count_check_table - 2].checkType, "String") == 0 || strcmp(check_table[symbol_count_check_table - 1].checkType, "String"))
           }
-            
-            add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
+          // check if one of theme is a string => you cannot perform operations
+          if(strcmp(check_table[symbol_count_check_table - 1].checkType, "String") == 0) {
+            if(strcmp(check_table[symbol_count_check_table - 2].checkType, "String") == 0 ) {
+              printf("\n\n\nhello\n\n\n");
+              exit(1);
+            }
+          }
+
+          add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
           }//let x = 1 + 2;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;
         | LET ID  COLON return_type ASSIGN operand SEMICOLON  {
@@ -334,7 +340,7 @@ int main(int argc, char *argv[]) {
 }
 
 int yyerror(char *s){
-    extern int yylineno;
-    fprintf(stderr,"Syntax Error occured at line %d: %s\n",yylineno,s);
+    // extern int yylineno;
+    // fprintf(stderr,"Syntax Error occured at line %d: %s\n",yylineno,s);
     return 0;
 }

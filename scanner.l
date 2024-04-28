@@ -24,7 +24,7 @@
 
   int scope_count = 0;
   int scope_id_count = 0;
-  char *check_type = "val";
+  char *check_type = "";
 
   struct check_type_entry {
     char value[40];
@@ -39,10 +39,7 @@
 
   int search_symbol_table(char *name, int scope, int scope_id) {
     for (int i = 0; i < symbol_count; i++) {
-         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
-            return symbol_table[i].lineno;
-        }
-        else if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
+         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
             return symbol_table[i].lineno;
         }
     }
@@ -61,7 +58,6 @@
     }
     return "NULL"; // Return -1 if not found
   }
-
 
 
 
