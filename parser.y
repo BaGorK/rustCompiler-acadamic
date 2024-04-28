@@ -230,7 +230,7 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
           char *name1= strdup(search_by_name($4));
           char *name2= strdup(search_by_name($6));
 
-          // if $4 and $6 are Id, then they must be declared in the symbol table so I can check their check type
+          // if $4 and $6 are Id, then they must be declared in the symbol table so I can compare their data type by using their check type
           char *data_type_of_operands = compareDataType($4, $6);
           if(strcmp(name1,"NULL") != 0,strcmp(name2,"NULL") != 0) {
             if (strcmp(data_type_of_operands, "") == 0) {
@@ -240,7 +240,14 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
           }
 
           // check data type mismatch for values that are not IDs like let test = 4 + "str";
-            printf("%s\n%s\n\n\n", $4, $6);
+          // printf("\n\n\n%s\n\n\n\n",check_table[symbol_count_check_table - 2].checkType );
+          if(strcmp(check_table[symbol_count_check_table - 2].value, $4) == 0 && strcmp(check_table[symbol_count_check_table - 1].value, $6) == 0 ) {
+            if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){
+              printf("\n\nDATA TYPE MISMATCH ERROR: You tried to operate on two different variables with a diferent data type.\tvalue one called \"%s\" with a data type of \"%s\" to an other value called \"%s\" with a data type \"%s\"\n\n\n\n",check_table[symbol_count_check_table - 2].value,check_table[symbol_count_check_table - 2].checkType,check_table[symbol_count_check_table - 1].value, check_table[symbol_count_check_table - 1].checkType );
+               exit(1);
+            }
+          }
+            
             add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
           }//let x = 1 + 2;
         | LET ID  COLON return_type SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} // let sum: i32 ;

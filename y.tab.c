@@ -871,13 +871,13 @@ static const short yyrline[] = { 0,
    153,   155,   155,   155,   159,   162,   163,   166,   166,   168,
    170,   171,   172,   173,   174,   175,   176,   177,   178,   179,
    180,   182,   189,   197,   206,   213,   214,   221,   223,   224,
-   224,   225,   226,   227,   228,   229,   229,   246,   247,   250,
-   251,   253,   254,   255,   256,   257,   260,   260,   262,   262,
-   264,   264,   266,   266,   268,   268,   270,   271,   272,   273,
-   276,   277,   278,   278,   278,   279,   281,   288,   289,   290,
-   291,   293,   293,   293,   293,   293,   293,   293,   293,   293,
-   293,   294,   294,   294,   294,   294,   294,   294,   294,   294,
-   294,   296,   296
+   224,   225,   226,   227,   228,   229,   229,   253,   254,   257,
+   258,   260,   261,   262,   263,   264,   267,   267,   269,   269,
+   271,   271,   273,   273,   275,   275,   277,   278,   279,   280,
+   283,   284,   285,   285,   285,   286,   288,   295,   296,   297,
+   298,   300,   300,   300,   300,   300,   300,   300,   300,   300,
+   300,   301,   301,   301,   301,   301,   301,   301,   301,   301,
+   301,   303,   303
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1615,7 +1615,7 @@ case 37:
           char *name1= strdup(search_by_name(yyvsp[-3].strval));
           char *name2= strdup(search_by_name(yyvsp[-1].strval));
 
-          // if $4 and $6 are Id, then they must be declared in the symbol table so I can check their check type
+          // if $4 and $6 are Id, then they must be declared in the symbol table so I can compare their data type by using their check type
           char *data_type_of_operands = compareDataType(yyvsp[-3].strval, yyvsp[-1].strval);
           if(strcmp(name1,"NULL") != 0,strcmp(name2,"NULL") != 0) {
             if (strcmp(data_type_of_operands, "") == 0) {
@@ -1625,34 +1625,41 @@ case 37:
           }
 
           // check data type mismatch for values that are not IDs like let test = 4 + "str";
-            printf("%s\n%s\n\n\n", yyvsp[-3].strval, yyvsp[-1].strval);
+          // printf("\n\n\n%s\n\n\n\n",check_table[symbol_count_check_table - 2].checkType );
+          if(strcmp(check_table[symbol_count_check_table - 2].value, yyvsp[-3].strval) == 0 && strcmp(check_table[symbol_count_check_table - 1].value, yyvsp[-1].strval) == 0 ) {
+            if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){
+              printf("\n\nDATA TYPE MISMATCH ERROR: You tried to operate on two different variables with a diferent data type.\tvalue one called \"%s\" with a data type of \"%s\" to an other value called \"%s\" with a data type \"%s\"\n\n\n\n",check_table[symbol_count_check_table - 2].value,check_table[symbol_count_check_table - 2].checkType,check_table[symbol_count_check_table - 1].value, check_table[symbol_count_check_table - 1].checkType );
+               exit(1);
+            }
+          }
+            
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, "dynamic", "");
           ;
     break;}
 case 38:
-#line 246 "parser.y"
+#line 253 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 39:
-#line 247 "parser.y"
+#line 254 "parser.y"
 {
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
         ;
     break;}
 case 40:
-#line 250 "parser.y"
+#line 257 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "");;
     break;}
 case 62:
-#line 277 "parser.y"
+#line 284 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 64:
-#line 278 "parser.y"
+#line 285 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic", "");;
     break;}
 case 67:
-#line 281 "parser.y"
+#line 288 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1865,7 +1872,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 300 "parser.y"
+#line 307 "parser.y"
 
 
 
