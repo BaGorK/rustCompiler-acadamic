@@ -1,16 +1,24 @@
 use my_module::my_function as func;
 
 //TODO:
-let valId : &str = 5 + "str";
+// let valId : &str = 5 + "str";
 
-// let varR = 4
- 
+
+// let  N =  "n";
+let m : &str;
 
 // // Function returning an integer
-fn add1(x: i32, y: i32) -> i32 {
+fn add1 (x: i32, y: i32) -> i32 {
+    println!("hello");
     let w;
+    //let ;
+    //let t
+     w = 4;
 
-    let z = 4;
+     // let e : i32 = true; data type mismatch;
+     let  e: bool = false;
+    
+    let varR = 4;
     return x + y;
 }
 
