@@ -6,7 +6,6 @@
   #include <ctype.h>
 
 
-
   struct symbol_entry {
     char name[50];
     char kind[20];
@@ -40,12 +39,11 @@
 
   int search_symbol_table(char *name, int scope, int scope_id) {
     for (int i = 0; i < symbol_count; i++) {
-        //  if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
-        //     return symbol_table[i].token_type;
-        // }
-        // else 
-        if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
-            return symbol_table[i].token_type;
+         if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope < scope){
+            return symbol_table[i].lineno;
+        }
+        else if (strcmp(symbol_table[i].name, name) == 0 && symbol_table[i].scope == scope && symbol_table[i].scope_id == scope_id) {
+            return symbol_table[i].lineno;
         }
     }
     return -1; // Return -1 if not found
@@ -103,12 +101,12 @@ int search_functions_symbol_table(char *name, int scope) {
 
 
 
-void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char *datatype, char *value) {
-  int index = search_symbol_table(name, scope_count, scope_id_count);
-  if (index != -1) {
-    printf("Error: Variable %s already declared in the same scope at line number %d with scope of %d and scope id of %d\n", name, lineno, scope_count, scope_id_count);
-    exit(1);
-  }
+  void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char *datatype, char *value) {
+    int index = search_symbol_table(name, scope_count, scope_id_count);
+    if (index != -1) {
+      printf("\n\n\n\VARIABLE REDECLARATION ERROR: Variable \"%s\" at line number \"%d\" already declared in the same scope at line number %d  . Please Rename you Variable Name to another.\n\n\n", name, lineno, index, scope_count, scope_id_count);
+      exit(1);
+    }
 
     if(strcmp(value, "") != 0) {
       strcpy(symbol_table[symbol_count].checkType, check_type);
@@ -181,50 +179,49 @@ void add_to_symbol_table(char *name, char *kind, int tokentype, int lineno, char
     }
 
     symbol_count++;
-}
+  }
 
 
 
-void update_assignment_values(char *name, char *newValue) {
-  for (int i = 0; i < symbol_count; i++) {
-    if(strcmp(symbol_table[i].name, name) == 0) {
-      if(strcmp(symbol_table[i].data_type, check_type) != 0 
-       && strcmp(symbol_table[i].data_type, "dynamic") != 0) {
-          printf("\n\n\nDATA TYPE MISMATCH ERROR : you tried to assign a value with a data type of \t\"%s\" to a value with a data type of \t\"%s\" at line number \t\"%d\n\n\n", symbol_table[i].data_type, check_type, yylineno);
-          exit(1);
-        }
-      strcpy(symbol_table[i].value, newValue);
-      strcpy(symbol_table[i].checkType, check_type);
+  void update_assignment_values(char *name, char *newValue) {
+    for (int i = 0; i < symbol_count; i++) {
+      if(strcmp(symbol_table[i].name, name) == 0) {
+        if(strcmp(symbol_table[i].data_type, check_type) != 0 
+        && strcmp(symbol_table[i].data_type, "dynamic") != 0) {
+            printf("\n\n\nDATA TYPE MISMATCH ERROR : you tried to assign a value with a data type of \t\"%s\" to a value with a data type of \t\"%s\" at line number \t\"%d\n\n\n", symbol_table[i].data_type, check_type, yylineno);
+            exit(1);
+          }
+        strcpy(symbol_table[i].value, newValue);
+        strcpy(symbol_table[i].checkType, check_type);
+      }
     }
   }
-}
 
 
 
-void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
-  int index = search_functions_symbol_table(name, scope_count);
-  if (index != -1) {
-    printf("Function Redeclaration Error: function %s already declared in the same scope at line number %d with scope of %d\n", name, lineno, scope_count);
-    exit(1);
+  void add_functions_to_symbol_table(char *name, char *kind, int tokentype, int lineno) {
+    int index = search_functions_symbol_table(name, scope_count);
+    if (index != -1) {
+      printf("Function Redeclaration Error: function %s already declared in the same scope at line number %d with scope of %d\n", name, lineno, scope_count);
+      exit(1);
+    }
+
+      strcpy(symbol_table[symbol_count].name, name);
+      strcpy(symbol_table[symbol_count].kind, kind);
+
+      symbol_table[symbol_count].token_type = tokentype;
+      symbol_table[symbol_count].lineno = lineno;
+
+      symbol_table[symbol_count].scope = scope_count;
+      symbol_table[symbol_count].scope_id = scope_id_count;
+
+      symbol_count++;
   }
 
-    strcpy(symbol_table[symbol_count].name, name);
-    strcpy(symbol_table[symbol_count].kind, kind);
-
-    symbol_table[symbol_count].token_type = tokentype;
-    symbol_table[symbol_count].lineno = lineno;
-
-    symbol_table[symbol_count].scope = scope_count;
-    symbol_table[symbol_count].scope_id = scope_id_count;
-
-    symbol_count++;
-}
-
-void displaySymbolTable() {
-
-  for (int i = 0; i < symbol_count_check_table; i++) {
-    printf("%s\t %s\n",check_table[i].value,check_table[i].checkType);
-  }
+  void displaySymbolTable() {
+    for (int i = 0; i < symbol_count_check_table; i++) {
+      printf("%s\t %s\n",check_table[i].value,check_table[i].checkType);
+    }
 
     // printf("------------------------------------------------------------------------------------------------------------\n");
     printf("-------------------------------------------SYMBOL TABLE--------------------------------------------------------------------------------------\n\n");

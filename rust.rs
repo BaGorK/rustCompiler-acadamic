@@ -20,12 +20,13 @@ fn main() {
     //TODO: ALSO FOR BOOLEAN ASSIGNMENT
     boolVar = "some";
 
-    let num : &str = someValue;
+    // let num : &str = someValue;
     let name : &str = someValue;
 
     let number = 2;
     let number2: i32 = 6;
     let b : bool;
+    let special;
     let s : &str;
     let f : f64;
     let test = "num1";
@@ -41,6 +42,7 @@ fn main() {
     println!("name: {}", name);
 
     if number % 2 == 0 {
+        let special;
         let z;
         println!("{} is even.", number);
     } else {
@@ -48,8 +50,12 @@ fn main() {
     }
 
     //TODO: CHECK DATA TYPE OF VARIABLE ASSIGNMENT
-    let adding = number * number2;
+    // let adding = number * number2;
     // adding = 8;
 
-    let test = 4 + "num";
+    //TODO: DATA TYPE CHECK FOR DIFFERENT DATA TYPES IMPLEMENTED
+    // let test = 4 + "num";
+
+    let num = 4 + 3;
+
 }

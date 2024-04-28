@@ -876,13 +876,13 @@ static const short yyrline[] = { 0,
    159,   161,   161,   161,   165,   168,   169,   172,   172,   174,
    176,   177,   178,   179,   180,   181,   182,   183,   184,   185,
    186,   188,   195,   203,   212,   219,   220,   227,   229,   230,
-   230,   231,   232,   233,   234,   235,   235,   259,   260,   263,
-   264,   266,   267,   268,   269,   270,   273,   273,   275,   275,
-   277,   277,   279,   279,   281,   281,   283,   284,   285,   286,
-   289,   290,   291,   291,   291,   292,   294,   301,   302,   303,
-   304,   306,   306,   306,   306,   306,   306,   306,   306,   306,
-   306,   307,   307,   307,   307,   307,   307,   307,   307,   307,
-   307,   309,   309
+   230,   231,   232,   233,   234,   235,   235,   264,   265,   268,
+   269,   271,   272,   273,   274,   275,   278,   278,   280,   280,
+   282,   282,   284,   284,   286,   286,   288,   289,   290,   291,
+   294,   295,   296,   296,   296,   297,   299,   306,   307,   308,
+   309,   311,   311,   311,   311,   311,   311,   311,   311,   311,
+   311,   312,   312,   312,   312,   312,   312,   312,   312,   312,
+   312,   314,   314
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","STRING_LITERAL",
@@ -1617,6 +1617,7 @@ case 35:
 case 37:
 #line 235 "parser.y"
 {
+
           char *name1= strdup(search_by_name(yyvsp[-3].strval));
           char *name2= strdup(search_by_name(yyvsp[-1].strval));
 
@@ -1632,39 +1633,43 @@ case 37:
           // check data type mismatch for values that are not IDs like let test = 4 + "str";
           // printf("\n\n\n%s\n\n\n\n",check_table[symbol_count_check_table - 2].checkType );
           if(strcmp(check_table[symbol_count_check_table - 2].value, yyvsp[-3].strval) == 0 && strcmp(check_table[symbol_count_check_table - 1].value, yyvsp[-1].strval) == 0 ) {
+            // check if they have the same data type
             if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){
               printf("\n\nDATA TYPE MISMATCH ERROR: You tried to operate on two different variables with a diferent data type.\tvalue one called \"%s\" with a data type of \"%s\" to an other value called \"%s\" with a data type \"%s\"\n\n\n\n",check_table[symbol_count_check_table - 2].value,check_table[symbol_count_check_table - 2].checkType,check_table[symbol_count_check_table - 1].value, check_table[symbol_count_check_table - 1].checkType );
                exit(1);
             }
+
+            // check if one of theme is a string => you cannot perform operations
+            // if(strcmp(check_table[symbol_count_check_table - 2].checkType, "String") == 0 || strcmp(check_table[symbol_count_check_table - 1].checkType, "String"))
           }
             
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, "dynamic", "");
           ;
     break;}
 case 38:
-#line 259 "parser.y"
+#line 264 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "variable", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 39:
-#line 260 "parser.y"
+#line 265 "parser.y"
 {
             add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, yyvsp[-1].strval);
         ;
     break;}
 case 40:
-#line 263 "parser.y"
+#line 268 "parser.y"
 {add_to_symbol_table(yyvsp[-5].strval, "variable", ID, yylineno, yyvsp[-3].strval, "");;
     break;}
 case 62:
-#line 290 "parser.y"
+#line 295 "parser.y"
 {add_to_symbol_table(yyvsp[-3].strval, "parameter", ID, yylineno, yyvsp[-1].strval, "");;
     break;}
 case 64:
-#line 291 "parser.y"
+#line 296 "parser.y"
 {add_to_symbol_table(yyvsp[0].strval, "parameter", ID, yylineno, "dynamic", "");;
     break;}
 case 67:
-#line 294 "parser.y"
+#line 299 "parser.y"
 {
                 char *name1= strdup(search_by_name(yyvsp[0].strval));
                 if(strcmp(name1,"NULL") == 0){
@@ -1877,7 +1882,7 @@ YYLABEL(yyerrhandle)
 /* END */
 
  #line 1038 "/usr/share/bison++/bison.cc"
-#line 313 "parser.y"
+#line 318 "parser.y"
 
 
 

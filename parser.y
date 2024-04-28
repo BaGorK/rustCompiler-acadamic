@@ -7,6 +7,11 @@
     extern int yylex();
     int yyerror(char* s);
 
+    #pragma warn -par
+    #pragma warn -rch
+    #pragma warn -rvl
+    
+
 
   extern void add_to_symbol_table(char *name, char *kind, int tokentype,int line_number, char *datatype, char *value);
   extern void add_functions_to_symbol_table(char *name, char *kind, int tokentype,int line_number);
@@ -40,6 +45,7 @@
   #define YYSTYPE_IS_DECLARED
 
 %}
+
 
 %name myparser  // this will fix the error : parser.y:98 parser name defined to default :"parse"
 
@@ -227,6 +233,7 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
         | LET ID COLON return_type ASSIGN FALSE SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "false");}
         | LET ID ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
         | LET ID ASSIGN operand operator operand SEMICOLON  {
+
           char *name1= strdup(search_by_name($4));
           char *name2= strdup(search_by_name($6));
 
@@ -242,10 +249,14 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
           // check data type mismatch for values that are not IDs like let test = 4 + "str";
           // printf("\n\n\n%s\n\n\n\n",check_table[symbol_count_check_table - 2].checkType );
           if(strcmp(check_table[symbol_count_check_table - 2].value, $4) == 0 && strcmp(check_table[symbol_count_check_table - 1].value, $6) == 0 ) {
+            // check if they have the same data type
             if(strcmp(check_table[symbol_count_check_table - 2].checkType, check_table[symbol_count_check_table - 1].checkType) != 0){
               printf("\n\nDATA TYPE MISMATCH ERROR: You tried to operate on two different variables with a diferent data type.\tvalue one called \"%s\" with a data type of \"%s\" to an other value called \"%s\" with a data type \"%s\"\n\n\n\n",check_table[symbol_count_check_table - 2].value,check_table[symbol_count_check_table - 2].checkType,check_table[symbol_count_check_table - 1].value, check_table[symbol_count_check_table - 1].checkType );
                exit(1);
             }
+
+            // check if one of theme is a string => you cannot perform operations
+            // if(strcmp(check_table[symbol_count_check_table - 2].checkType, "String") == 0 || strcmp(check_table[symbol_count_check_table - 1].checkType, "String"))
           }
             
             add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");
