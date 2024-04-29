@@ -34,3 +34,7 @@ cc lex.yy.c y.tab.c
 ```
 ./a.out rust.rs
 ```
+
+### SYMBOL TABLE
+
+<img src="/rust compiler symbol table.png" />
