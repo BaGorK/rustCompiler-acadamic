@@ -44,9 +44,9 @@ fn main() {
      let num : &str = someValue;
     let name : &str = someValue;
 
-    let test4 :i32 = 32;
-    let test5 :&str = "32";
-    let test6 =  test4 + test5;
+    // let test4 :i32 = 32;
+    // let test5 :&str = "32";
+    // let test6 =  test4 + test5;
 
     let number = 1;
     let number2: i32 = 6;
