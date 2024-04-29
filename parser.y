@@ -14,6 +14,7 @@
   extern void update_assignment_values(char *name, char *newValue);
   extern char* compareDataType(char *id1, char *id2);
   extern char* search_by_name(char *name);
+  extern   char* search_by_name_scope(char *name);
 
   extern int yylineno;
   extern int scope_count;
@@ -239,9 +240,12 @@ print_stmt: PRINTLN LPAREN STRING COMMA operand RPAREN SEMICOLON {
           | PRINTLN  {printf("\n\n\nSYNTAX ERROR OCCURED: you are missing a left parenthesis when using the println! function At line number %d\n\n\n", yylineno); exit(1);} STRING COMMA operand RPAREN SEMICOLON
           | PRINTLN LPAREN STRING  {printf("\n\n\nSYNTAX ERROR OCCURED: you are missing a Right parenthesis when using the println! function At line number %d\n\n\n", yylineno); exit(1);} SEMICOLON 
           | PRINTLN LPAREN STRING RPAREN  {printf("\n\n\nSYNTAX ERROR OCCURED: you are missing a SEMICOLON when using the println! function. At line number %d\n\n\n", yylineno); exit(1);}  
+          | PRINTLN LPAREN ID RPAREN SEMICOLON{
+            search_by_name_scope($3);
+            }
           |; 
 
-var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", "");} SEMICOLON
+var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", ""); } SEMICOLON
         //wrong check
         | LET ID {printf("\n\nERROR OCCURED: There is a missing semicolon in the variable declaration at line num %d\n\n", yylineno); exit(1);} 
         | LET SEMICOLON {printf("\n\nERROR OCCURED: There is a missing ID | NAME in the variable declaration at line num %d\n\n", yylineno); exit(1);} 
@@ -268,7 +272,7 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
         | LET ID COLON ASSIGN FALSE SEMICOLON {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing return type when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);}
         | LET {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing ID / NAME when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} COLON ASSIGN FALSE SEMICOLON 
 
-        | LET ID ASSIGN operand {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
+        | LET ID ASSIGN operand {search_by_name_scope($4); add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", $4);} SEMICOLON   // let name = 10;
         | LET ASSIGN operand {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing ID / NAME when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} SEMICOLON   // let name = 10;
         | LET ID ASSIGN operand {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing semicolon when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} 
         | LET ID operand {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing assign operator when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} SEMICOLON
@@ -317,6 +321,10 @@ var_decl: LET ID  {add_to_symbol_table($2, "variable", ID, yylineno, "dynamic", 
         | LET ID  COLON return_type ASSIGN operand {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing semicolon when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} 
         | LET ID  COLON return_type ASSIGN expression SEMICOLON {add_to_symbol_table($2, "variable", ID, yylineno, $4, "");} //  let id : i32 = 1 + 3;
         | LET ID  COLON return_type ASSIGN expression {printf("\n\n\nSYNTAX ERROR OCCURED: There is a missing semicolon when declaring a variable. at line number %d\n\n\n", yylineno); exit(1);} 
+        | LET ID ASSIGN ID LPAREN operand comma operand RPAREN SEMICOLON {
+          
+          //printf("\n\n\nfunction call\n");
+          }
         |;
 var_decl_wrong: 
 

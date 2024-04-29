@@ -59,6 +59,18 @@
     return "NULL"; // Return -1 if not found
   }
 
+  char* search_by_name_scope(char *name) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            if(symbol_table[i].scope_id != scope_id_count) {
+              printf("\n\nERROR OUT OF THE SCOPE ACCESS : \"%s\" is not declared in the same scope. you cannot access it.\n\n", name);
+              exit(1);
+            }
+        }
+    }
+    return "NULL"; // Return -1 if not found
+  }
+
 
 
 

@@ -13,26 +13,40 @@ fn add1 (x: i32, y: i32) -> i32 {
     let w;
     //let ;
     //let t
-     w = 4;
+    let outofscope = 5;
+    w = 4;
 
-     // let e : i32 = true; data type mismatch;
-     let  e: bool = false;
-    
+    // let e : i32 = true; data type mismatch;
+    let  e: bool = false;
+
     let varR = 4;
+
     return x + y;
 }
 
 
 fn main() {
-    let someValue: &str = "STRING VAL";
-    //FIXME: Syntax Error occured at line 13: parse error
-    let boolVar = true;
+     // println!(outofscope);
+     // let testing = outofscope;
+    
+    let valueOfAdd = add1(3, 4);
+    
+    // let boolVar = varR;
     let boolVar2 : bool = false;
     //TODO: ALSO FOR BOOLEAN ASSIGNMENT
-    boolVar = "some";
+    //boolVar2 = "some";
+    
+    // VARIABLE NOT DECLARED ERROR
+    // let bool5 = unk;
+    //someValue = fjadaf;
+    let someValue = "val";
 
-    // let num : &str = someValue;
+     let num : &str = someValue;
     let name : &str = someValue;
+
+    let test4 :i32 = 32;
+    let test5 :&str = "32";
+    let test6 =  test4 + test5;
 
     let number = 1;
     let number2: i32 = 6;
@@ -61,16 +75,20 @@ fn main() {
     }
 
     //TODO: CHECK DATA TYPE OF VARIABLE ASSIGNMENT
-    // let adding = number * number2;
+    let str : &str;
+   // let adding = str * number2;
     // adding = 8;
 
     //TODO: DATA TYPE CHECK FOR DIFFERENT DATA TYPES IMPLEMENTED
     // let test = 4 + "num";
 
-    // FIXME:
-    // let num = "4" / "5";
+    // let num =  5 / 4;
+    // let test2 : bool = true;
+    // let test1 : &str = "test";
+    // let test3 = test1 + test2;
+    //test2 = fja;
     
-    
+
     //TODO: VARIABLE USAGE BEFORE INITIALIZATION
-    // random = 4;
+    //let random = str;
 }
